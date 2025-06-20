@@ -56,7 +56,7 @@ const SsoPage = () => {
   const handleAuth = () => {
     setRedirecting(true);
     window.location.href =
-      'https://app.onextdigital.com/?sso=1&redirect=https://sync.onextdigital.com/connect-platform-app/application/token';
+      'https://app.onextdigital.com/?sso=1&redirect=http://165.227.75.90:4000/connect-platform-app/application/token';
   };
 
   if (checking)
