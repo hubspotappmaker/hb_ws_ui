@@ -55,8 +55,8 @@ const SsoPage = () => {
 
   const handleAuth = () => {
     setRedirecting(true);
-    window.location.href =
-      'https://app.onextdigital.com/?sso=1&redirect=https:https://gdrive.onextdigital.com/connect-platform-app/application/token';
+    const redirectUrl = encodeURIComponent('https://gdrive.onextdigital.com/connect-platform-app/application/token');
+    window.location.href = `https://app.onextdigital.com/?sso=1&redirect=${redirectUrl}`;
   };
 
   if (checking)

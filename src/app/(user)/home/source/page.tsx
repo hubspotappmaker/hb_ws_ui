@@ -337,7 +337,7 @@ const ResponsiveModal = styled(Modal)`
 
 const sourcePlatforms = [
   {
-    name: 'Shopify',
+    name: 'Google Drive',
     description: 'Connect your Shopify store to import products, orders, and customers.',
     icon:
       <img
