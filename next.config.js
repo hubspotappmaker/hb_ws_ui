@@ -1,6 +1,6 @@
 
 const nextConfig = {
-  basePath: '/fe',
+  // basePath: '/fe',
   compiler: {
     styledComponents: true,
   },
