@@ -143,8 +143,8 @@ const ConnectHubspot: React.FC = () => {
 
             const response = await connectHubspot(finalPrefix);
             console.log("check url: ", response);
-            return response
-            window.location.href = response;
+            // return response
+            window.location.href = response || '';
         } catch (error)
         {
             console.error('Error connecting to HubSpot:', error);

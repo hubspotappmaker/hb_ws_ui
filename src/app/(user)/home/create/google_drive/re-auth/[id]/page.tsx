@@ -134,7 +134,7 @@ const ReConnectHubspot: React.FC = () => {
         {
             setLoading(true);
             const url = await connectHubspot(finalPrefix);
-            window.location.href = url;
+            window.location.href = url || '';
         } catch (err)
         {
             console.error('Error connecting to HubSpot:', err);
