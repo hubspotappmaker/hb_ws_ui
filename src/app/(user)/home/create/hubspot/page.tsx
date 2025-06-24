@@ -127,24 +127,25 @@ const ConnectHubspot: React.FC = () => {
         return validatePrefix(currentPrefix) === '';
     };
 
+
     const handleConnect = async () => {
         try
         {
             setLoading(true);
-            const finalPrefix = prefix;
+            // const finalPrefix = prefix;
 
-            // Final validation before connecting
-            const error = validatePrefix(finalPrefix);
-            if (error)
-            {
-                message.error(error);
-                return;
-            }
+            // // Final validation before connecting
+            // const error = validatePrefix(finalPrefix);
+            // if (error)
+            // {
+            //     message.error(error);
+            //     return;
+            // }
 
-            const response = await connectHubspot(finalPrefix);
-            console.log("check url: ", response);
+            const oauthUrl = `https://app-na2.hubspot.com/oauth/authorize?client_id=06593d8a-656b-40cc-a0ec-63c11bf7c5c3&redirect_uri=https://gdrive.onextdigital.com/fe/api/hubspot/callback&scope=crm.objects.contacts.write%20crm.objects.deals.read%20crm.objects.deals.write%20crm.objects.contacts.read`;
+            window.location.href = oauthUrl;
             // return response
-            window.location.href = response || '';
+            // window.location.href = response || '';
         } catch (error)
         {
             console.error('Error connecting to HubSpot:', error);
@@ -208,7 +209,7 @@ const ConnectHubspot: React.FC = () => {
                                 type="primary"
                                 size="large"
                                 onClick={handleConnect}
-                                disabled={!isFormValid()}
+                                // disabled={!isFormValid()}
                             >
                                 Connect to HubSpot
                             </StyledButton>
