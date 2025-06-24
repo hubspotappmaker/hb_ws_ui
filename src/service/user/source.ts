@@ -14,13 +14,26 @@ export const connectShopifyApi = async (data: {
 };
 
 export const connectHubspot = async (prefix: string) => {
-    const res = await dataxios.get(`/application/install-hubspot?prefix=${prefix}`)
-    return res.data;
+    const connect_hubspot = '1'
+    if(connect_hubspot){
+        window.location.href = 'https://app-na2.hubspot.com/oauth/authorize?client_id=06593d8a-656b-40cc-a0ec-63c11bf7c5c3&redirect_uri=https://gdrive.onextdigital.com/fe/api/hubspot/callback&scope=crm.objects.contacts.write%20crm.objects.deals.read%20crm.objects.deals.write%20crm.objects.contacts.read'
+
+    }else{
+        return null
+    }
+
 }
 
 export const connectGoogleDrive = async (prefix: string) => {
-    const res = await axios.get(`https://app-na2.hubspot.com/oauth/authorize?client_id=06593d8a-656b-40cc-a0ec-63c11bf7c5c3&redirect_uri=https://gdrive.onextdigital.com/fe/api/hubspot/callback&scope=crm.objects.contacts.write%20crm.objects.deals.read%20crm.objects.deals.write%20crm.objects.contacts.read`)
-    return res.data;
+    const connect_gdrive = process.env.API_CONNECT_GDRIVE
+
+    if(connect_gdrive){
+        const res = await axios.get(connect_gdrive)
+        return res.data;
+    }else{
+        return null
+    }
+
 }
 
 export const getAllSourceCrm = async (page: number, limit: number) => {

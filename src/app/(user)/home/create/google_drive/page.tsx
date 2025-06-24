@@ -157,7 +157,7 @@ const ConnectHubspot: React.FC = () => {
     return (
         <PageContainer>
             <HeaderContainer>
-                <StyledTitle level={2}>Connect HubSpot</StyledTitle>
+                <StyledTitle level={2}>Connect Google Drive</StyledTitle>
             </HeaderContainer>
 
             <ContentContainer>
@@ -176,32 +176,6 @@ const ConnectHubspot: React.FC = () => {
                             This will allow you to access from your Google account.
                         </StyledParagraph>
 
-                        {/*<FormContainer>*/}
-                        {/*    <Form form={form} layout="vertical">*/}
-                        {/*        <Form.Item*/}
-                        {/*            label='Prefix'*/}
-                        {/*            name="prefix"*/}
-                        {/*            validateStatus={prefixError ? 'error' : ''}*/}
-                        {/*            // help={prefixError || `${prefix.length}/20 characters`}*/}
-                        {/*            style={{ textAlign: 'left' }}*/}
-                        {/*        >*/}
-                        {/*            <Tooltip*/}
-                        {/*                placement="rightTop"*/}
-                        {/*                title="We will create custom fields based on Shopify's standard fields. Kindly specify a prefix or leave it blank for these fields"*/}
-                        {/*                color='blue'*/}
-                        {/*            >*/}
-                        {/*                <StyledInput*/}
-                        {/*                    placeholder="shopify_"*/}
-                        {/*                    value={prefix}*/}
-                        {/*                    onChange={handlePrefixChange}*/}
-                        {/*                    showCount*/}
-                        {/*                    maxLength={20}*/}
-                        {/*                />*/}
-                        {/*            </Tooltip>*/}
-                        {/*        </Form.Item>*/}
-                        {/*    </Form>*/}
-                        {/*</FormContainer>*/}
-
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
                             <StyledButton
                                 type="primary"
@@ -209,7 +183,7 @@ const ConnectHubspot: React.FC = () => {
                                 onClick={handleConnect}
                                 disabled={!isFormValid()}
                             >
-                                Connect to HubSpot
+                                Connect to Google Drive
                             </StyledButton>
                         </div>
 

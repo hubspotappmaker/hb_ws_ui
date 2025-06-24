@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
+    "@ant-design/icons-svg": "^4.4.2",
     "@ant-design/nextjs-registry": "^1.0.2",
     "@paypal/react-paypal-js": "^8.8.3",
     "antd": "^5.25.1",
