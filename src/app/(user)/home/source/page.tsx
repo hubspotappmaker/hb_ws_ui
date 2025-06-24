@@ -337,17 +337,17 @@ const ResponsiveModal = styled(Modal)`
 
 const sourcePlatforms = [
   {
-    name: 'Google Drive',
-    description: 'Connect your Shopify store to import products, orders, and customers.',
+    name: 'google_drive',
+    description: 'Connect your Google Drive to import your files.',
     icon:
       <img
         style={{
           width: 32
         }}
-        src="/img/shopify.png" alt="Shopify" />
+        src="/img/gd-icon.png" alt="Shopify" />
     ,
-    type: 'eCommerce',
-    logo: '/shopify-logo.png',
+    type: 'CRM',
+    logo: '/img/gd-icon.png',
   },
   {
     name: 'HubSpot',
@@ -722,7 +722,7 @@ const Source = () => {
             </PlatformIconSection>
             <PlatformContentSection>
               <PlatformTitle>
-                {platform.name}
+                {platform.name === 'google_drive' ? "Google Drive" : platform.name}
                 <TypeTag
                   color={
                     platform.type === 'eCommerce'
