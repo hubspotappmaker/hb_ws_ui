@@ -146,10 +146,11 @@ const ConnectHubspot: React.FC = () => {
 
 
             const res:any = await axios.get(`https://gdrive.onextdigital.com/connect-platform-app/application/check-hub-id?email=${email}`);
-             if(res){
-                 const portalId = res.hub_id
+             if(res.data){
+                 const portalId = res.data
                  window.location.href = `https://gdrive.onextdigital.com/auth?portalId='${portalId}'`;
-
+             }else{
+                 message.error('Failed to connect to HubSpot. Please try again.');
              }
 
         } catch (error)
