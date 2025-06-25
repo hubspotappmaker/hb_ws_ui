@@ -4,6 +4,7 @@ import { Button, Typography, Card, message, Spin, Input, Form, Tooltip } from 'a
 import styled from 'styled-components';
 import { connectHubspot } from '@/service/user/source';
 import { QuestionCircleOutlined, ShopTwoTone } from '@ant-design/icons';
+import axios from "axios";
 
 const { Title, Paragraph } = Typography;
 
@@ -141,11 +142,16 @@ const ConnectHubspot: React.FC = () => {
             //     message.error(error);
             //     return;
             // }
+             const email = localStorage.getItem('email')
 
-            const oauthUrl = `https://app-na2.hubspot.com/oauth/authorize?client_id=06593d8a-656b-40cc-a0ec-63c11bf7c5c3&redirect_uri=https://gdrive.onextdigital.com/fe/api/hubspot/callback&scope=crm.objects.contacts.write%20crm.objects.deals.read%20crm.objects.deals.write%20crm.objects.contacts.read`;
-            window.location.href = oauthUrl;
-            // return response
-            // window.location.href = response || '';
+
+            const res:any = await axios.get(`https://gdrive.onextdigital.com/connect-platform/application/check-hub-id?${email}`);
+             if(res){
+                 const portalId = res.hub_id
+                 window.location.href = `https://gdrive.onextdigital.com/auth?portalId='${portalId}'`;
+
+             }
+
         } catch (error)
         {
             console.error('Error connecting to HubSpot:', error);
