@@ -145,7 +145,7 @@ const ConnectHubspot: React.FC = () => {
              const email = localStorage.getItem('email')
 
 
-            const res:any = await axios.get(`https://gdrive.onextdigital.com/connect-platform/application/check-hub-id?${email}`);
+            const res:any = await axios.get(`https://gdrive.onextdigital.com/connect-platform-app/application/check-hub-id?email=${email}`);
              if(res){
                  const portalId = res.hub_id
                  window.location.href = `https://gdrive.onextdigital.com/auth?portalId='${portalId}'`;
