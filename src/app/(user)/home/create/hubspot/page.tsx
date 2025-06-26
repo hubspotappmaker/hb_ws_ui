@@ -107,21 +107,6 @@ const ConnectHubspot: React.FC = () => {
         return '';
     };
 
-    const handlePrefixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.toLowerCase(); // Convert to lowercase automatically
-        setPrefix(value);
-
-        const error = validatePrefix(value);
-        setPrefixError(error);
-
-        // Update form field error
-        form.setFields([
-            {
-                name: 'prefix',
-                errors: error ? [error] : [],
-            },
-        ]);
-    };
 
     const isFormValid = () => {
         const currentPrefix = prefix;
@@ -177,31 +162,6 @@ const ConnectHubspot: React.FC = () => {
                             This will allow you to access contacts, companies, deals, and other information from your HubSpot account.
                         </StyledParagraph>
 
-                        <FormContainer>
-                            <Form form={form} layout="vertical">
-                                <Form.Item
-                                    label='Prefix'
-                                    name="prefix"
-                                    validateStatus={prefixError ? 'error' : ''}
-                                    // help={prefixError || `${prefix.length}/20 characters`}
-                                    style={{ textAlign: 'left' }}
-                                >
-                                    <Tooltip
-                                        placement="rightTop"
-                                        title="We will create custom fields based on Hubspot's standard fields. Kindly specify a prefix or leave it blank for these fields"
-                                        color='blue'
-                                    >
-                                        <StyledInput
-                                            placeholder="hubspot_"
-                                            value={prefix}
-                                            onChange={handlePrefixChange}
-                                            showCount
-                                            maxLength={20}
-                                        />
-                                    </Tooltip>
-                                </Form.Item>
-                            </Form>
-                        </FormContainer>
 
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
                             <StyledButton

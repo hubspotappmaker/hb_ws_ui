@@ -107,22 +107,6 @@ const ConnectHubspot: React.FC = () => {
         return '';
     };
 
-    const handlePrefixChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.toLowerCase(); // Convert to lowercase automatically
-        setPrefix(value);
-
-        const error = validatePrefix(value);
-        setPrefixError(error);
-
-        // Update form field error
-        form.setFields([
-            {
-                name: 'prefix',
-                errors: error ? [error] : [],
-            },
-        ]);
-    };
-
     const isFormValid = () => {
         const currentPrefix = prefix;
         return validatePrefix(currentPrefix) === '';
@@ -189,19 +173,6 @@ const ConnectHubspot: React.FC = () => {
                             This will allow you to access from your Google account.
                         </StyledParagraph>
 
-                        <Tooltip
-                            placement="rightTop"
-                            title="We will create custom fields based on Hubspot's standard fields. Kindly specify a prefix or leave it blank for these fields"
-                            color='blue'
-                        >
-                            <StyledInput
-                                placeholder="hubspot_"
-                                value={prefix}
-                                onChange={handlePrefixChange}
-                                showCount
-                                maxLength={20}
-                            />
-                        </Tooltip>
 
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
                             <StyledButton
