@@ -4,7 +4,7 @@ import { Button, Typography, Card, message, Spin, Input, Form, Tooltip } from 'a
 import styled from 'styled-components';
 import {connectGoogleDrive, connectHubspot} from '@/service/user/source';
 import { QuestionCircleOutlined, ShopTwoTone } from '@ant-design/icons';
-import axios from "axios/index";
+import axios from "axios";
 
 const { Title, Paragraph } = Typography;
 
