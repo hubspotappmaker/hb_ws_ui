@@ -142,7 +142,7 @@ const ConnectHubspot: React.FC = () => {
             //     message.error(error);
             //     return;
             // }
-            const oauthUrl = `https://app-na2.hubspot.com/oauth/authorize?client_id=06593d8a-656b-40cc-a0ec-63c11bf7c5c3&redirect_uri=https://gdrive.onextdigital.com/fe/api/hubspot/callback&scope=crm.objects.contacts.write%20crm.objects.deals.read%20crm.objects.deals.write%20crm.objects.contacts.read`;
+            const oauthUrl = `https://app-na2.hubspot.com/oauth/authorize?client_id=ec608a84-8a8c-4f54-8696-2db8fab01752&redirect_uri=https://gdrive.onextdigital.com/fe/api/hubspot/callback&scope=crm.objects.contacts.write%20crm.objects.deals.read%20crm.objects.deals.write%20crm.objects.contacts.read`
             window.location.href = oauthUrl;
 
         } catch (error)
