@@ -179,7 +179,7 @@ const ConnectHubspot: React.FC = () => {
                                 type="primary"
                                 size="large"
                                 onClick={handleConnect}
-                                disabled={!isFormValid()}
+                                // disabled={!isFormValid()}
                             >
                                 Connect to Google Drive
                             </StyledButton>
