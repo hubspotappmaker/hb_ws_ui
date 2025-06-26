@@ -149,14 +149,17 @@ const ConnectHubspot: React.FC = () => {
             if(res.data && res.status == 200){
                 const portalId = res.data
                 window.location.href = `https://gdrive.onextdigital.com/fe/auth?portalId='${portalId}'`;
-            }else{
-                message.error('You will need to connect to HubSpot to use this feature.');
             }
             // window.location.href = response;
         } catch (error)
         {
+        if(error.response?.status === 400){
+            message.error('You will need to connect to HubSpot to use this feature.');
+        }else{
+
             console.error('Error connecting to HubSpot:', error);
             message.error('Failed to connect to HubSpot. Please try again.');
+        }
         } finally
         {
             setLoading(false);
