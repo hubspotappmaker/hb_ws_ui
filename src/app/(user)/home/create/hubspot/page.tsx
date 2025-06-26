@@ -188,11 +188,11 @@ const ConnectHubspot: React.FC = () => {
                                 >
                                     <Tooltip
                                         placement="rightTop"
-                                        title="We will create custom fields based on Shopify's standard fields. Kindly specify a prefix or leave it blank for these fields"
+                                        title="We will create custom fields based on Hubspot's standard fields. Kindly specify a prefix or leave it blank for these fields"
                                         color='blue'
                                     >
                                         <StyledInput
-                                            placeholder="shopify_"
+                                            placeholder="hubspot_"
                                             value={prefix}
                                             onChange={handlePrefixChange}
                                             showCount

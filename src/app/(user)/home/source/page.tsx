@@ -587,6 +587,9 @@ const Source = () => {
       title: 'Platform',
       dataIndex: ['platform', 'name'],
       key: 'platform',
+      render:(name:string) =>{
+        return name === 'hubspot' ? 'Hubspot' : 'Google Drive'
+      },
     },
     {
       title: 'Type',

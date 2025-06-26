@@ -206,7 +206,7 @@ const ReConnectHubspot: React.FC = () => {
                                         color='blue'
                                     >
                                         <StyledInput
-                                            placeholder="shopify_"
+                                            placeholder="googledrive_"
                                             value={prefix}
                                             onChange={handlePrefixChange}
                                             showCount

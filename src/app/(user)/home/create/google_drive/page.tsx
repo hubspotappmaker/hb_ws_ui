@@ -82,10 +82,10 @@ const ConnectHubspot: React.FC = () => {
 
     // Validate prefix function
     const validatePrefix = (value: string) => {
-        // if (!value || value.trim() === '')
-        // {
-        //     return 'Prefix is required';
-        // }
+        if (!value || value.trim() === '')
+        {
+            return 'Prefix is required';
+        }
 
         if (value.length > 0 && value.length < 5)
         {
@@ -132,15 +132,15 @@ const ConnectHubspot: React.FC = () => {
         try
         {
             setLoading(true);
-            // const finalPrefix = prefix;
-            //
-            // // Final validation before connecting
-            // const error = validatePrefix(finalPrefix);
-            // if (error)
-            // {
-            //     message.error(error);
-            //     return;
-            // }
+            const finalPrefix = prefix;
+
+            // Final validation before connecting
+            const error = validatePrefix(finalPrefix);
+            if (error)
+            {
+                message.error(error);
+                return;
+            }
 
             const email = localStorage.getItem('email')
 
@@ -150,7 +150,7 @@ const ConnectHubspot: React.FC = () => {
                 const portalId = res.data.data
                 console.log(portalId)
 
-                window.location.href = `https://gdrive.onextdigital.com/fe/auth?hubId=${portalId}`;
+                window.location.href = `https://gdrive.onextdigital.com/fe/auth?hubId=${email}`;
             }
             // window.location.href = response;
         } catch (error:any) {
@@ -188,6 +188,20 @@ const ConnectHubspot: React.FC = () => {
                             Connect your Google Driver account to seamlessly integrate your data.
                             This will allow you to access from your Google account.
                         </StyledParagraph>
+
+                        <Tooltip
+                            placement="rightTop"
+                            title="We will create custom fields based on Hubspot's standard fields. Kindly specify a prefix or leave it blank for these fields"
+                            color='blue'
+                        >
+                            <StyledInput
+                                placeholder="hubspot_"
+                                value={prefix}
+                                onChange={handlePrefixChange}
+                                showCount
+                                maxLength={20}
+                            />
+                        </Tooltip>
 
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
                             <StyledButton
