@@ -714,19 +714,19 @@ const Connect: React.FC = () => {
       key: 'createdAt',
       render: (createdAt: string) => new Date(createdAt).toLocaleString(),
     },
-    {
-      title: 'Syncing Status',
-      dataIndex: 'isSyncing',
-      key: 'isSyncing',
-      render: (isSyncing: string) => (
-        <Tag
-          color={isSyncing ? 'green' : 'red'}
-          icon={isSyncing ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
-        >
-          {isSyncing ? "Sycing" : "Ready For Sync"}
-        </Tag>
-      ),
-    },
+    // {
+    //   title: 'Syncing Status',
+    //   dataIndex: 'isSyncing',
+    //   key: 'isSyncing',
+    //   render: (isSyncing: string) => (
+    //     <Tag
+    //       color={isSyncing ? 'green' : 'red'}
+    //       icon={isSyncing ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+    //     >
+    //       {isSyncing ? "Sycing" : "Ready For Sync"}
+    //     </Tag>
+    //   ),
+    // },
     {
       title: 'Webhook Status',
       dataIndex: 'status',

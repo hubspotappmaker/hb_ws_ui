@@ -738,7 +738,7 @@ const Source = () => {
                   {platform.type == 'eCommerce' ?  'Storage' : platform.type  }
                 </TypeTag>
               </PlatformTitle>
-              <PlatformDescription>{platform.description}12</PlatformDescription>
+              <PlatformDescription>{platform.description}</PlatformDescription>
             </PlatformContentSection>
           </PlatformCard>
         ))}
