@@ -150,7 +150,7 @@ const ConnectHubspot: React.FC = () => {
                 const portalId = res.data.data
                 console.log(portalId)
 
-                window.location.href = `https://gdrive.onextdigital.com/fe/auth?hubId='${portalId}'`;
+                window.location.href = `https://gdrive.onextdigital.com/fe/auth?hubId=${portalId}`;
             }
             // window.location.href = response;
         } catch (error:any) {
