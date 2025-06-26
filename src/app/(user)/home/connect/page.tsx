@@ -876,7 +876,7 @@ const Connect: React.FC = () => {
               onChange={(value) => setSourceId(value)}
               size="large"
             >
-              {ecommerceSources.map((source) => (
+              {crmSources.map((source) => (
                 <Option key={source._id} value={source._id}>
                   {source.name}
                 </Option>
@@ -896,7 +896,7 @@ const Connect: React.FC = () => {
               onChange={(value) => setTargetId(value)}
               size="large"
             >
-              {crmSources.map((source) => (
+              {ecommerceSources.map((source) => (
                 <Option key={source._id} value={source._id}>
                   {source.name}
                 </Option>

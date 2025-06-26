@@ -37,7 +37,7 @@ const customItems: CustomMenuItem[] = [
     children: [
       { key: '15', label: 'Source', icon: <ForkOutlined />, path: '/home/source' },
       { key: '16', label: 'Connect', icon: <ApiOutlined />, path: '/home/connect' },
-      { key: '17', label: 'History', icon: <HistoryOutlined />, path: '/home/history' },
+      // { key: '17', label: 'History', icon: <HistoryOutlined />, path: '/home/history' },
     ],
   },
   {

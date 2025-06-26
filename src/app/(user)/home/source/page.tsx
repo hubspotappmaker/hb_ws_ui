@@ -346,7 +346,7 @@ const sourcePlatforms = [
         }}
         src="/img/gd-icon.png" alt="Shopify" />
     ,
-    type: 'CRM',
+    type: 'eCommerce',
     logo: '/img/gd-icon.png',
   },
   {
@@ -597,7 +597,7 @@ const Source = () => {
         let color = 'blue';
         if (normalizedType === 'ecommerce') color = 'green';
         if (normalizedType === 'crm') color = 'purple';
-        return <Tag color={color}>{type.charAt(0).toUpperCase() + type.slice(1)}</Tag>;
+        return <Tag color={color}>{normalizedType !== 'ecommerce' ? (type.charAt(0).toUpperCase() + type.slice(1)) : 'Storage'}</Tag>;
       },
     },
     {
@@ -732,10 +732,10 @@ const Source = () => {
                         : 'cyan'
                   }
                 >
-                  {platform.type}
+                  {platform.type == 'eCommerce' ?  'Storage' : platform.type  }
                 </TypeTag>
               </PlatformTitle>
-              <PlatformDescription>{platform.description}</PlatformDescription>
+              <PlatformDescription>{platform.description}12</PlatformDescription>
             </PlatformContentSection>
           </PlatformCard>
         ))}
