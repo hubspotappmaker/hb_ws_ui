@@ -148,7 +148,7 @@ const ConnectHubspot: React.FC = () => {
             const res:any = await axios.get(`https://gdrive.onextdigital.com/connect-platform-app/application/check-hub-id?email=${email}`);
             if(res.data && res.status == 200){
                 const portalId = res.data
-                window.location.href = `https://gdrive.onextdigital.com/fe/auth?portalId='${portalId}'`;
+                window.location.href = `https://gdrive.onextdigital.com/fe/auth?hubId='${portalId}'`;
             }
             // window.location.href = response;
         } catch (error:any) {
