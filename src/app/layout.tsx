@@ -4,8 +4,8 @@ import StyledComponentsRegistry from "@/lib/registry/registry";
 
 
 export const metadata: Metadata = {
-  title: "Shopify Sync Hubspot Application",
-  description: "Shopify Sync Hubspot Application",
+  title: "Google Drive Sync Hubspot Application",
+  description: "Google Drive Sync Hubspot Application",
   icons: {
     icon: '/favicon.ico',
   },
