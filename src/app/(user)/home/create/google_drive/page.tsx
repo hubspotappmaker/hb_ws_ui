@@ -81,50 +81,50 @@ const ConnectHubspot: React.FC = () => {
     const [form] = Form.useForm();
 
     // Validate prefix function
-    const validatePrefix = (value: string) => {
-        if (!value || value.trim() === '')
-        {
-            return 'Prefix is required';
-        }
+    // const validatePrefix = (value: string) => {
+    //     if (!value || value.trim() === '')
+    //     {
+    //         return 'Prefix is required';
+    //     }
+    //
+    //     if (value.length > 0 && value.length < 5)
+    //     {
+    //         return 'Prefix must be at least 5 characters';
+    //     }
+    //
+    //     if (value.length > 20)
+    //     {
+    //         return 'Prefix must not exceed 20 characters';
+    //     }
+    //
+    //     // Check for special characters and spaces
+    //     const specialCharRegex = /[^a-z0-9]/;
+    //     if (specialCharRegex.test(value))
+    //     {
+    //         return 'Prefix must not contain special characters or spaces';
+    //     }
+    //
+    //     return '';
+    // };
 
-        if (value.length > 0 && value.length < 5)
-        {
-            return 'Prefix must be at least 5 characters';
-        }
-
-        if (value.length > 20)
-        {
-            return 'Prefix must not exceed 20 characters';
-        }
-
-        // Check for special characters and spaces
-        const specialCharRegex = /[^a-z0-9]/;
-        if (specialCharRegex.test(value))
-        {
-            return 'Prefix must not contain special characters or spaces';
-        }
-
-        return '';
-    };
-
-    const isFormValid = () => {
-        const currentPrefix = prefix;
-        return validatePrefix(currentPrefix) === '';
-    };
+    // const isFormValid = () => {
+    //     const currentPrefix = prefix;
+    //     return validatePrefix(currentPrefix) === '';
+    // };
 
     const handleConnect = async () => {
         try
         {
-            setLoading(true);
-            const finalPrefix = prefix;
-
-            // Final validation before connecting
-            const error = validatePrefix(finalPrefix);
-            if (error)
-            {
-                message.error(error);
-                return;
-            }
+            // setLoading(true);
+            // const finalPrefix = prefix;
+            //
+            // // Final validation before connecting
+            // const error = validatePrefix(finalPrefix);
+            // if (error)
+            // {
+            //     message.error(error);
+            //     return;
+            // }
 
             const email = localStorage.getItem('email')
 
