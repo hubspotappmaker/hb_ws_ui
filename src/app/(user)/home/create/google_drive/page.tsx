@@ -129,12 +129,12 @@ const ConnectHubspot: React.FC = () => {
             const email = localStorage.getItem('email')
 
 
-            const res:any = await axios.get(`https://gdrive.nexce.com/connect-platform-app/application/check-hub-id?email=${email}`);
+            const res:any = await axios.get(`https://gdrive.nexce.io/connect-platform-app/application/check-hub-id?email=${email}`);
             if(res.data && res.status == 200){
                 const portalId = res.data.data
                 console.log(portalId)
 
-                window.location.href = `https://gdrive.nexce.com/fe/auth?hubId=${email}`;
+                window.location.href = `https://gdrive.nexce.io/fe/auth?hubId=${email}`;
             }
             // window.location.href = response;
         } catch (error:any) {
