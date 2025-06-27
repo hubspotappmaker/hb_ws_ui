@@ -118,12 +118,11 @@ const Second = () => {
                   <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <img src="/img/connect-google.png" alt="HubSpot"
                          style={{
-                           width: '100%',        // full width of column
-                           maxWidth: 700,        // prevent it from getting too big
-                           // margin: '0 auto',     // center the image horizontally
-                           //   height:'400px',
-                           borderRadius: 8,      // optional: soft corners
-                           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' // optional: nice shadow
+                             width: '100%',        // full width of column
+                             maxWidth: 500,        // prevent it from getting too big
+                             // margin: '0 auto',     // center the image horizontally
+                             borderRadius: 8,      // optional: soft corners
+                             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' // optional: nice shadow
                          }}
                     />
                   </Col>

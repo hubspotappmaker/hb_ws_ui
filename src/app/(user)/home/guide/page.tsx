@@ -13,7 +13,7 @@ const contentStyle: React.CSSProperties = {
 // autoplay={{ dotDuration: true }} autoplaySpeed={5000}
 const GuidePage = () => {
     return (
-        <Carousel arrows autoplay={{ dotDuration: true }} autoplaySpeed={3000}>
+        <Carousel arrows >
             <div>
                 <First/>
             </div>
@@ -23,9 +23,6 @@ const GuidePage = () => {
             <div>
                 <Third/>
             </div>
-            {/*<div>*/}
-            {/*    <First/>*/}
-            {/*</div>*/}
         </Carousel>
     )
 }

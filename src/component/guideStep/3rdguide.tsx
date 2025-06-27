@@ -65,7 +65,7 @@ const Third = () => {
                   <Col xs={24} sm={22} md={20}>
                     <img src="/img/side-connect.png" alt="HubSpot"
                          style={{
-                             width: '66%',        // full width of column
+                             width: '50%',        // full width of column
                              maxWidth: 500,        // prevent it from getting too big
                              // margin: '0 auto',     // center the image horizontally
                              borderRadius: 8,      // optional: soft corners
@@ -87,7 +87,7 @@ const Third = () => {
                   <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <img src="/img/conectsource.png" alt="HubSpot"
                          style={{
-                           width: '80%',        // full width of column
+                           width: '70%',        // full width of column
                            maxWidth: 500,        // prevent it from getting too big
                            // margin: '0 auto',     // center the image horizontally
                            borderRadius: 8,      // optional: soft corners
@@ -107,8 +107,9 @@ const Third = () => {
                   <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <img src="/img/connecttion-chose.png" alt="HubSpot"
                          style={{
-                             width: '80%',        // full width of column
-                             maxWidth: 500,        // prevent it from getting too big
+                             width: '70%',        // full width of column
+                             maxWidth: 500,
+                            // prevent it from getting too big
                              // margin: '0 auto',     // center the image horizontally
                              borderRadius: 8,      // optional: soft corners
                              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' // optional: nice shadow
