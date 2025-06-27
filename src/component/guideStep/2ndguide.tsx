@@ -71,7 +71,7 @@ const Second = () => {
                     //   padding: '48px 18px',
                     // }}
                 >
-                  <Col Col xs={24} sm={22} md={20}>
+                  <Col xs={24} sm={22} md={20}>
                     <img src="/img/source.png" alt="HubSpot"
                          style={{
                            width: '79%',        // full width of column
@@ -82,7 +82,7 @@ const Second = () => {
                          }}
                     />
                   </Col>
-                  <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
+                  <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <Paragraph strong style={{ color: '#fff' }}>
                       1. Go to the <Text strong underline style={{ color: '#b9deff' }} >Source</Text> page and click  <Text strong underline style={{ color: '#b9deff' }}> Create New Source</Text>. </Paragraph>
                   </Col>
@@ -94,7 +94,7 @@ const Second = () => {
                     //   padding: '48px 18px',
                     // }}
                 >
-                  <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
+                  <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <img src="/img/chosing-connect.png" alt="HubSpot"
                          style={{
                            width: '100%',        // full width of column
@@ -105,7 +105,7 @@ const Second = () => {
                          }}
                     />
                   </Col>
-                  <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
+                  <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <Paragraph strong style={{ color: '#fff' }}>
                       2. In the popup, select <Text strong underline style={{ color: '#00ff11' }}>Google Drive</Text> to connect your storage data.
                     </Paragraph>
@@ -115,7 +115,7 @@ const Second = () => {
                 {/* Step 3 */}
                 <Row align="middle" gutter={16}
                 >
-                  <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
+                  <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <img src="/img/connect-google.png" alt="HubSpot"
                          style={{
                            width: '100%',        // full width of column
@@ -127,7 +127,7 @@ const Second = () => {
                          }}
                     />
                   </Col>
-                  <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
+                  <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <Paragraph strong style={{ color: '#fff' }}>
                       3. Log in and authorize access to your <Text strong underline style={{ color: '#00ff11' }}>Google Drive</Text> account for connect to your storage.
                     </Paragraph>

@@ -62,7 +62,7 @@ const Third = () => {
                     //   padding: '48px 18px',
                     // }}
                 >
-                  <Col Col xs={24} sm={22} md={20}>
+                  <Col xs={24} sm={22} md={20}>
                     <img src="/img/side-connect.png" alt="HubSpot"
                          style={{
                              width: '66%',        // full width of column
@@ -72,7 +72,7 @@ const Third = () => {
                              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' // optional: nice shadow
                          }}/>
                   </Col>
-                  <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
+                  <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <Paragraph strong style={{ color: '#fff' }}>
                       1. Go to the <Text strong underline style={{ color: '#b9deff' }} >Connect</Text> page and click  <Text strong underline style={{ color: '#b9deff' }}> Create Connection</Text>. </Paragraph>
                   </Col>
@@ -84,7 +84,7 @@ const Third = () => {
                     //   padding: '48px 18px',
                     // }}
                 >
-                  <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
+                  <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <img src="/img/conectsource.png" alt="HubSpot"
                          style={{
                            width: '80%',        // full width of column
@@ -95,7 +95,7 @@ const Third = () => {
                          }}
                     />
                   </Col>
-                  <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
+                  <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <Paragraph strong style={{ color: '#fff' }}>
                       2. In the popup, enter <Text strong underline style={{ color: '#b9deff' }}>Description</Text> to describe your connection name.
                     </Paragraph>
@@ -104,7 +104,7 @@ const Third = () => {
 
                 {/* Step 3 */}
                 <Row align="middle" gutter={16}>
-                  <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
+                  <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <img src="/img/connecttion-chose.png" alt="HubSpot"
                          style={{
                              width: '80%',        // full width of column
@@ -115,7 +115,7 @@ const Third = () => {
                          }}
                     />
                   </Col>
-                  <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
+                  <Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <Paragraph strong style={{ color: '#fff' }}>
                       3. From each dropdown, select<Text strong  style={{ color: '#ff6600' }}> HubSpot </Text> account and
                       the corresponding
