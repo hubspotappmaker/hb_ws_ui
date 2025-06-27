@@ -13,7 +13,7 @@ import type { MenuProps } from 'antd';
 import { Card, Layout, Typography, Row, Col, Avatar } from 'antd';
 
 const { Title, Paragraph, Text } = Typography;
-const { Header, Content } = Layout;
+const { Header, Content,Footer } = Layout;
 
 const layoutStyle = {
   borderRadius: 8,
@@ -32,7 +32,7 @@ const headerStyle: React.CSSProperties = {
 };
 
 const contentStyle: React.CSSProperties = {
-  minHeight: '100vh',
+  height: '400px',
   // backgroundColor: '#0066ff',
   // padding: '40px 24px',
   borderRadius: 5,
@@ -48,34 +48,41 @@ const First = () => {
           </Title>
         </Header>
         <Content style={contentStyle}>
-          <Row justify="center" >
+          <Row justify="center"  >
             <Col span={24}>
               <Card
                   style={{
-                    width: '100%',
-                    minHeight: '100vh',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
-                    padding: 40,
-                    backgroundImage: 'linear-gradient(to bottom right, #0958d9, #003eb3)'
+                      height: '100%',               // Force it to fill parent
+                      minHeight: '600px',           // Prevent it from collapsing
+                      display: 'flex',              // Flex container
+                      flexDirection: 'column',      // Stack children
+                      justifyContent: 'space-between', // or center if you want vertical center
+                      backgroundImage: 'linear-gradient(to bottom right, #0958d9, #003eb3)',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
+                      padding: 40,
                   }}
-                  bodyStyle={{ padding: 0 }}
               >
-                <Title level={4} style={{ textAlign: 'center', marginBottom: 32 ,color:'white'}}>
-                  Step 1: Create Source
+                <Title level={2} style={{ textAlign: 'center', marginBottom: 32 ,color:'white'}}>
+                  Step 1: Create HubSpot Source
                 </Title>
 
                 {/* Step 1 */}
                 <Row align="middle" gutter={16}
-                     // style={{
-                     //   padding: '48px 18px',
-                     // }}
                 >
                   <Col Col xs={24} sm={22} md={20}>
-                    <img src="/img/source.png" alt="HubSpot" style={{ width: '69%' }} />
+                    <img src="/img/source.png" alt="HubSpot"
+                         style={{
+                             width: '79%',        // full width of column
+                             maxWidth: 500,        // prevent it from getting too big
+                             // margin: '0 auto',     // center the image horizontally
+                             borderRadius: 8,      // optional: soft corners
+                             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' // optional: nice shadow
+                         }}
+                    />
                   </Col>
                   <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <Paragraph strong style={{ color: '#fff' }}>
-                      1. Go to the <Text strong>Source</Text> page and click <Text strong>Create New Source</Text>.                    </Paragraph>
+                      1. Go to the <Text strong underline style={{ color: '#b9deff' }} >Source</Text> page and click  <Text strong underline style={{ color: '#b9deff' }}> Create New Source</Text>. </Paragraph>
                   </Col>
                 </Row>
 
@@ -86,27 +93,39 @@ const First = () => {
                      // }}
                 >
                   <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
-                      <img src="/img/chosing-connect.png" alt="HubSpot" style={{ width: '100%' }} />
+                      <img src="/img/chosing-connect.png" alt="HubSpot"
+                           style={{
+                               width: '100%',        // full width of column
+                               maxWidth: 500,        // prevent it from getting too big
+                               margin: '0 auto',     // center the image horizontally
+                               borderRadius: 8,      // optional: soft corners
+                               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' // optional: nice shadow
+                           }}
+                      />
                   </Col>
                   <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <Paragraph strong style={{ color: '#fff' }}>
-                      2. In the popup, select <Text strong>HubSpot</Text> to connect your CRM data.
+                      2. In the popup, select <Text strong underline style={{ color: '#ff6600' }}>HubSpot</Text> to connect your CRM data.
                     </Paragraph>
                   </Col>
                 </Row>
 
                 {/* Step 3 */}
-                <Row align="middle" gutter={16}
-                     // style={{
-                     //   padding: '48px 24px',
-                     // }}
-                >
+                <Row align="middle" gutter={16}>
                   <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
-                      <img src="/img/connect-hubspot.png" alt="HubSpot" style={{ width: '100%' }} />
+                      <img src="/img/connect-hubspot.png" alt="HubSpot"
+                           style={{
+                             width: '100%',        // full width of column
+                             maxWidth: 500,        // prevent it from getting too big
+                             margin: '0 auto',     // center the image horizontally
+                             borderRadius: 8,      // optional: soft corners
+                             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' // optional: nice shadow
+                           }}
+                      />
                   </Col>
                   <Col Col xs={24} sm={22} md={20} lg={16} xl={14}>
                     <Paragraph strong style={{ color: '#fff' }}>
-                      3. Log in and authorize access to your <Text strong>HubSpot</Text> account.
+                      3. Log in and authorize access to your <Text strong underline style={{ color: '#ff6600' }}> HubSpot</Text> account for later connection.
                     </Paragraph>
                   </Col>
                 </Row>

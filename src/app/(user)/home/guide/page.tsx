@@ -1,5 +1,7 @@
 import {Carousel, Steps} from "antd";
 import First from "@/component/guideStep/1stguide";
+import Second from "@/component/guideStep/2ndguide";
+import Third from "@/component/guideStep/3rdguide";
 
 const contentStyle: React.CSSProperties = {
     // height: '50px',
@@ -11,22 +13,19 @@ const contentStyle: React.CSSProperties = {
 // autoplay={{ dotDuration: true }} autoplaySpeed={5000}
 const GuidePage = () => {
     return (
-        <Carousel arrows autoplay={{ dotDuration: true }} autoplaySpeed={5000}>
-            <div>
-                {/*<h3 style={contentStyle}>Connect to Hubspot</h3>*/}
-            <First/>
-            </div>
-            <div>
-                <First/>
-
-            </div>
-            <div>
-                <First/>
-
-            </div>
+        <Carousel arrows autoplay={{ dotDuration: true }} autoplaySpeed={3000}>
             <div>
                 <First/>
             </div>
+            <div>
+                <Second/>
+            </div>
+            <div>
+                <Third/>
+            </div>
+            {/*<div>*/}
+            {/*    <First/>*/}
+            {/*</div>*/}
         </Carousel>
     )
 }

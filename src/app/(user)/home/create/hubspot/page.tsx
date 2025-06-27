@@ -158,7 +158,7 @@ const ConnectHubspot: React.FC = () => {
                         </Title>
 
                         <StyledParagraph>
-                            Connect your HubSpot account to seamlessly integrate your marketing, sales, and CRM data.
+                            Connect your HubSpot account to seamlessly integrate your underlineeting, sales, and CRM data.
                             This will allow you to access contacts, companies, deals, and other information from your HubSpot account.
                         </StyledParagraph>
 

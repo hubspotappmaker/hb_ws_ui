@@ -187,7 +187,7 @@ const ReConnectHubspot: React.FC = () => {
                         </Title>
 
                         <StyledParagraph>
-                            Reconnect your HubSpot account to restore access to your marketing, sales, and CRM data.
+                            Reconnect your HubSpot account to restore access to your underlineeting, sales, and CRM data.
                             This will re-establish the connection to access contacts, companies, deals, and other information from your HubSpot account.
                         </StyledParagraph>
 

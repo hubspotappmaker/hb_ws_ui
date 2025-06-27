@@ -140,7 +140,7 @@ export default function HomeLayout({
                             ☰
                         </button>
                         <img
-                            src="https://nexce.io/wp-content/uploads/2025/06/cropped-cropped-NEX-3-e1750753156187.png"
+                            src="../public/img/logonext.png"
                             alt="Onext Digital"
                             style={{ height: '28px', marginLeft: '16px' }}
                         />
