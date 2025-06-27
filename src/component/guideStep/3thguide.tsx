@@ -175,7 +175,7 @@ const HomeMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =>
           backdropFilter: 'blur(10px)',
         }}>
           <img
-            src="https://onextdigital.com/wp-content/uploads/2023/10/OnextDigital-logo.png"
+            src="https://nexce.io/wp-content/uploads/2025/06/cropped-cropped-NEX-3-e1750753156187.png"
             alt="Onext Digital"
             style={{
               height: isMobile ? '28px' : '32px',

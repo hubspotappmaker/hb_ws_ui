@@ -13,7 +13,7 @@ const GuidePage = () => {
     return (
         <Carousel arrows autoplay={{ dotDuration: true }} autoplaySpeed={5000}>
             <div>
-                {/*<h3 style={contentStyle}>Connect to Hubspot</h3>*/}
+                <h3 style={contentStyle}>Connect to Hubspot</h3>
             <First/>
             </div>
             <div>

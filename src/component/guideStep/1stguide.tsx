@@ -25,7 +25,7 @@ const headerStyle: React.CSSProperties = {
   height: 64,
   paddingInline: 48,
   lineHeight: '64px',
-  backgroundColor: '#ff0000',
+  // backgroundColor: '#ff0000',
   fontSize: 20,
   fontWeight: 600,
   borderBottom: '1px solid #e0e0e0',
@@ -34,7 +34,9 @@ const headerStyle: React.CSSProperties = {
 const contentStyle: React.CSSProperties = {
   minHeight: '100vh',
   backgroundColor: '#0066ff',
-  padding: '40px 24px',
+  // padding: '40px 24px',
+  borderRadius: 5,
+
 };
 
 const First = () => {
@@ -42,16 +44,17 @@ const First = () => {
       <Layout style={layoutStyle}>
         <Header style={headerStyle}>How to connect to HubSpot</Header>
         <Content style={contentStyle}>
-          <Row justify="center">
+          <Row justify="center" >
             <Col span={24}>
               <Card
                   style={{
                     width: '100%',
-                    borderRadius: 12,
+                    minHeight: '100vh',
                     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
                     // padding: 40,
-                    background: '#ffffff',
+                    background: '#ce4040',
                   }}
+                  bodyStyle={{ padding: 0 }}
               >
                 <Title level={4} style={{ textAlign: 'center', marginBottom: 32 }}>
                   Step 1: Create Source
