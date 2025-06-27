@@ -38,7 +38,7 @@ export default function HomeLayout({
     }
 
     useEffect(() => {
-        // ping();
+        ping();
 
         // Check screen size
         const checkScreenSize = () => {
