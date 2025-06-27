@@ -14,7 +14,7 @@ export const connectShopifyApi = async (data: {
 };
 
 export const connectHubspot = async (prefix: string) => {
-    window.location.href = 'https://app-na2.hubspot.com/oauth/authorize?client_id=06593d8a-656b-40cc-a0ec-63c11bf7c5c3&redirect_uri=https://gdrive.onextdigital.com/fe/api/hubspot/callback&scope=crm.objects.contacts.write%20crm.objects.deals.read%20crm.objects.deals.write%20crm.objects.contacts.read'
+    window.location.href = 'https://app-na2.hubspot.com/oauth/authorize?client_id=06593d8a-656b-40cc-a0ec-63c11bf7c5c3&redirect_uri=https://gdrive.nexce.com/fe/api/hubspot/callback&scope=crm.objects.contacts.write%20crm.objects.deals.read%20crm.objects.deals.write%20crm.objects.contacts.read'
 }
 
 export const connectGoogleDrive = async (prefix: string) => {

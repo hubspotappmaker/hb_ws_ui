@@ -755,14 +755,14 @@ const Connect: React.FC = () => {
               onChange={(checked) => handleToggleActive(record.key, checked)}
             />
           </Tooltip>
-          <Button
-            type="primary"
-            icon={<SettingOutlined />}
-            onClick={() => {
-              navigate.push(`connect/setting/${record._id}`)
-            }}
-            size="small"
-          />
+          {/*<Button*/}
+          {/*  type="primary"*/}
+          {/*  icon={<SettingOutlined />}*/}
+          {/*  onClick={() => {*/}
+          {/*    navigate.push(`connect/setting/${record._id}`)*/}
+          {/*  }}*/}
+          {/*  size="small"*/}
+          {/*/>*/}
           <Button
             type="primary"
             disabled={record.isActive || record.isSyncing}
