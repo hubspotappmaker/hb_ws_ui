@@ -58,7 +58,7 @@ const SsoPage = () => {
     const redirectUrl = encodeURIComponent('https://gdrive.nexce.io/connect-platform-app/application/token');
     //  const redirectUrl = encodeURIComponent('http://localhost:8080/connect-platform-app/application/token');
 
-    window.location.href = `https://app.onextdigital.com/?sso=1&redirect=${redirectUrl}`;
+    window.location.href = `https://nexce.io/?sso=1&redirect=${redirectUrl}`;
   };
 
   if (checking)
