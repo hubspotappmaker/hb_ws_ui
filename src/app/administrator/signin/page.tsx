@@ -153,7 +153,7 @@ const SignIn = () => {
                     }}>
                         <img
                             src="https://nexce.io/wp-content/uploads/2025/06/cropped-cropped-NEX-3-e1750753156187.png"
-                            alt="Onext Digital"
+                            alt="Nexce Digital"
                             style={{
                                 height: 40,
                                 zIndex: 2,
@@ -291,7 +291,7 @@ const SignIn = () => {
                         color: '#7f8c8d',
                         fontSize: '14px'
                     }}>
-                        Power By Onext Digital Sync Tools
+                        Power By Nexce Digital Sync Tools
                     </p>
                 </div>
             </Card>

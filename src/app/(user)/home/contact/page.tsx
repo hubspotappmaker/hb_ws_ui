@@ -373,10 +373,10 @@ const ContactInfo: React.FC = () => {
       <ContentWrapper>
         <HeroSection>
           <HeroTitle level={1}>
-            Contact ONEXT DIGITAL
+            Nexus Customer Experience
           </HeroTitle>
           <HeroSubtitle>
-            ONEXT DIGITAL provides digital transformation consulting services and multi-sector
+            Nexus Customer Experience provides digital transformation consulting services and multi-sector
             software solutions for domestic and international businesses.
           </HeroSubtitle>
         </HeroSection>
@@ -394,10 +394,10 @@ const ContactInfo: React.FC = () => {
               >
                 <Space direction="vertical" size="small" style={{ width: '100%' }}>
                   <div className="address-line">
-                    2871 Hung Vuong Avenue
+                    18/11 Nguyen Du Street
                   </div>
                   <div className="address-line">
-                    Van Co Ward, Viet Tri City
+                    Nong Trang Ward, Viet Tri City
                   </div>
                   <div className="address-line">
                     Phu Tho Province, Vietnam
@@ -423,7 +423,7 @@ const ContactInfo: React.FC = () => {
                     <ContactText>
                       <ContactLabel>Email</ContactLabel>
                       <ContactValue type="link">
-                        info@onextdigital.com
+                        info@nexce.io
                       </ContactValue>
                     </ContactText>
                   </ContactItem>
@@ -447,7 +447,7 @@ const ContactInfo: React.FC = () => {
                     <ContactText>
                       <ContactLabel>Website</ContactLabel>
                       <ContactValue type="link">
-                        onextdigital.com
+                        nexce.io
                       </ContactValue>
                     </ContactText>
                   </ContactItem>
@@ -507,7 +507,7 @@ const ContactInfo: React.FC = () => {
             fontSize: '14px',
             fontWeight: '500'
           }}>
-            © {new Date().getFullYear()} ONEXT DIGITAL. All rights reserved.
+            © {new Date().getFullYear()} Nexus Customer Experience. All rights reserved.
           </Text>
         </FooterSection>
       </ContentWrapper>

@@ -120,7 +120,7 @@ const SsoPage = () => {
 
         <div style={styles.footer}>
           <Text style={styles.footerText}>
-            Powered by OnextDigital App
+            Powered by NexceDigital App
           </Text>
         </div>
       </Card>

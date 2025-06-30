@@ -173,7 +173,7 @@ const AdminMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =
         }}>
           <img
             src="https://nexce.io/wp-content/uploads/2025/06/cropped-cropped-NEX-3-e1750753156187.png"
-            alt="Onext Digital"
+            alt="Nexce Digital"
             style={{
               height: isMobile ? '28px' : '32px',
               // filter: 'brightness(0) invert(1)',
