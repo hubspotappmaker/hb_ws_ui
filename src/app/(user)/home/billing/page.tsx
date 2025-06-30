@@ -620,7 +620,7 @@ const BillingPage: React.FC = () => {
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 onClick={() => {
-                  window.open('http://app.onextdigital.com/my-account/', '_blank', 'noopener,noreferrer');
+                  window.open('https://nexce.io/my-account/', '_blank', 'noopener,noreferrer');
                 }}
               >
                 Go to My Account
