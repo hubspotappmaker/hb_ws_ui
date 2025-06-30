@@ -120,7 +120,7 @@ const SsoPage = () => {
 
         <div style={styles.footer}>
           <Text style={styles.footerText}>
-            Powered by NexceDigital App
+            Powered by Nexus Customer Experience
           </Text>
         </div>
       </Card>
