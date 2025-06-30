@@ -138,13 +138,8 @@ const ConnectHubspot: React.FC = () => {
             }
             // window.location.href = response;
         } catch (error:any) {
-        if(error.response?.status === 400){
-            message.error('You will need to connect to HubSpot to use this feature.');
-        }else{
-
             console.error('Error connecting to HubSpot:', error);
             message.error('Failed to connect to HubSpot. Please try again.');
-        }
         } finally
         {
             setLoading(false);
