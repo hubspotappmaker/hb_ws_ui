@@ -501,13 +501,13 @@ const Source = () => {
 
   const handleReauthen = async (platform: string, app_id: string) => {
     console.log("click reauth: ", platform)
-    if (platform === 'Hubspot')
+    if (platform === 'hubspot')
     {
 
       router.push(`/home/create/hubspot/re-auth/${app_id}`)
-    } else if (platform === "Shopify")
+    } else if (platform === "google_drive")
     {
-      router.push(`/home/create/shopify/re-auth/${app_id}`)
+      router.push(`/home/create/google_drive/re-auth/${app_id}`)
     } else
     {
       message.info("Cannot support re auth this platform!")
