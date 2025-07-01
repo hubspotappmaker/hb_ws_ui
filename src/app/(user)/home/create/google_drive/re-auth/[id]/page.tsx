@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { connectHubspot, getSourceById } from '@/service/user/source';
 import { ShopTwoTone } from '@ant-design/icons';
 import { useParams } from 'next/navigation';
+import axios from "axios";
 
 const { Title, Paragraph } = Typography;
 
@@ -153,20 +154,26 @@ const ReConnectHubspot: React.FC = () => {
     useEffect(() => {
         (async () => {
             setLoading(true);
-            try
-            {
-                const data = await getDetailSource();
-                const fetched = data.data.credentials.prefix;
-                setPrefix(fetched);
-                form.setFieldsValue({ prefix: fetched });
-            } catch (err)
-            {
-                console.error('Fetch source error:', err);
-            } finally
-            {
-                setLoading(false);
-            }
-        })();
+                try
+                {
+                    const email = localStorage.getItem('email')
+                    const res:any = await axios.get(`https://gdrive.nexce.io/connect-platform-app/application/check-hub-id?email=${email}`);
+                    if(res.data && res.status == 200){
+                        const portalId = res.data.data
+                        console.log(portalId)
+
+                        window.location.href = `https://gdrive.nexce.io/fe/auth?hubId=${email}`;
+                    }
+                    // window.location.href = response;
+                } catch (error:any) {
+                    console.error('Error connecting to HubSpot:', error);
+                    message.error('Failed to connect to HubSpot. Please try again.');
+                } finally
+                {
+                    setLoading(false);
+                }
+        }
+        )();
     }, [id, form]);
 
     return (

@@ -133,8 +133,8 @@ const ReConnectHubspot: React.FC = () => {
         try
         {
             setLoading(true);
-            const url = await connectHubspot(finalPrefix);
-            // window.location.href = url || '';
+            const oauthUrl = `https://app-na2.hubspot.com/oauth/authorize?client_id=ed661cf6-11ca-4441-8f9f-dcc884d8e6f9&redirect_uri=https://gdrive.nexce.io/fe/api/hubspot/callback&scope=crm.objects.contacts.write%20crm.objects.deals.read%20crm.objects.deals.write%20crm.objects.contacts.read`
+            window.location.href = oauthUrl;
         } catch (err)
         {
             console.error('Error connecting to HubSpot:', err);
