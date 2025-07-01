@@ -166,8 +166,8 @@ const ReConnectHubspot: React.FC = () => {
                     }
                     // window.location.href = response;
                 } catch (error:any) {
-                    console.error('Error connecting to HubSpot:', error);
-                    message.error('Failed to connect to HubSpot. Please try again.');
+                    console.error('Error connecting to Google Drive:', error);
+                    message.error('Failed to connect to Google drive. Please try again.');
                 } finally
                 {
                     setLoading(false);
@@ -190,65 +190,28 @@ const ReConnectHubspot: React.FC = () => {
                         </IconWrapper>
 
                         <Title level={3} style={{ color: '#333', marginBottom: '16px' }}>
-                            Reconnect Your HubSpot Account
+                            Reconnect Your Google Drive Account
                         </Title>
 
                         <StyledParagraph>
-                            Reconnect your HubSpot account to restore access to your underlineeting, sales, and CRM data.
-                            This will re-establish the connection to access contacts, companies, deals, and other information from your HubSpot account.
+                            Connect your Google Driver account to seamlessly integrate your data.
+                            This will allow you to access from your Google account.
                         </StyledParagraph>
 
-                        <FormContainer>
-                            <Form form={form} layout="vertical">
-                                <Form.Item
-                                    label="Prefix"
-                                    name="prefix"
-                                    validateStatus={prefixError ? 'error' : ''}
-                                    // help={prefixError || `${prefix.length}/20 characters`}
-                                    style={{ textAlign: 'left' }}
-                                >
-                                    <Tooltip
-                                        placement="rightTop"
-                                        title="We will create custom fields based on Shopify's standard fields. Kindly specify a prefix or leave it blank for these fields"
-                                        color='blue'
-                                    >
-                                        <StyledInput
-                                            placeholder="googledrive_"
-                                            value={prefix}
-                                            onChange={handlePrefixChange}
-                                            showCount
-                                            maxLength={20}
-                                        />
-                                    </Tooltip>
-                                </Form.Item>
-                            </Form>
-                        </FormContainer>
 
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
                             <StyledButton
                                 type="primary"
                                 size="large"
                                 onClick={handleConnect}
-                                disabled={!isFormValid()}
+                                // disabled={!isFormValid()}
                             >
-                                Reconnect to HubSpot
+                                Connect to Google Drive
                             </StyledButton>
                         </div>
 
-                        <Alert
-                            message="Important Note"
-                            description="Avoid changing the prefix frequently. If you change the prefix, you will need to reconfigure all metafield mappings and settings."
-                            type="warning"
-                            showIcon
-                            style={{
-                                margin: '24px auto',
-                                textAlign: 'left',
-                                maxWidth: '600px',
-                            }}
-                        />
-
                         <Paragraph style={{ marginTop: '24px', fontSize: '14px', color: '#888' }}>
-                            You'll be redirected to HubSpot to reauthorize access to your account.
+                            You'll be redirected to Google to authorize access to your account.
                         </Paragraph>
                     </div>
                 </Spin>
