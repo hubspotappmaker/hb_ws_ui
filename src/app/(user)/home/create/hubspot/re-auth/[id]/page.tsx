@@ -150,24 +150,24 @@ const ReConnectHubspot: React.FC = () => {
         return res;
     };
 
-    useEffect(() => {
-        (async () => {
-            setLoading(true);
-            try
-            {
-                const data = await getDetailSource();
-                const fetched = data.data.credentials.prefix;
-                setPrefix(fetched);
-                form.setFieldsValue({ prefix: fetched });
-            } catch (err)
-            {
-                console.error('Fetch source error:', err);
-            } finally
-            {
-                setLoading(false);
-            }
-        })();
-    }, [id, form]);
+    // useEffect(() => {
+    //     (async () => {
+    //         setLoading(true);
+    //         try
+    //         {
+    //             const data = await getDetailSource();
+    //             const fetched = data.data.credentials.prefix;
+    //             setPrefix(fetched);
+    //             form.setFieldsValue({ prefix: fetched });
+    //         } catch (err)
+    //         {
+    //             console.error('Fetch source error:', err);
+    //         } finally
+    //         {
+    //             setLoading(false);
+    //         }
+    //     })();
+    // }, [id, form]);
 
     return (
         <PageContainer>
@@ -193,27 +193,27 @@ const ReConnectHubspot: React.FC = () => {
 
                         <FormContainer>
                             <Form form={form} layout="vertical">
-                                <Form.Item
-                                    label="Prefix"
-                                    name="prefix"
-                                    validateStatus={prefixError ? 'error' : ''}
-                                    // help={prefixError || `${prefix.length}/20 characters`}
-                                    style={{ textAlign: 'left' }}
-                                >
-                                    <Tooltip
-                                        placement="rightTop"
-                                        title="We will create custom fields based on Shopify's standard fields. Kindly specify a prefix or leave it blank for these fields"
-                                        color='blue'
-                                    >
-                                        <StyledInput
-                                            placeholder="hubspot_"
-                                            value={prefix}
-                                            onChange={handlePrefixChange}
-                                            showCount
-                                            maxLength={20}
-                                        />
-                                    </Tooltip>
-                                </Form.Item>
+                                {/*<Form.Item*/}
+                                {/*    label="Prefix"*/}
+                                {/*    name="prefix"*/}
+                                {/*    validateStatus={prefixError ? 'error' : ''}*/}
+                                {/*    // help={prefixError || `${prefix.length}/20 characters`}*/}
+                                {/*    style={{ textAlign: 'left' }}*/}
+                                {/*>*/}
+                                    {/*<Tooltip*/}
+                                    {/*    placement="rightTop"*/}
+                                    {/*    title="We will create custom fields based on Shopify's standard fields. Kindly specify a prefix or leave it blank for these fields"*/}
+                                    {/*    color='blue'*/}
+                                    {/*>*/}
+                                    {/*    <StyledInput*/}
+                                    {/*        placeholder="hubspot_"*/}
+                                    {/*        value={prefix}*/}
+                                    {/*        onChange={handlePrefixChange}*/}
+                                    {/*        showCount*/}
+                                    {/*        maxLength={20}*/}
+                                    {/*    />*/}
+                                    {/*</Tooltip>*/}
+                                {/*</Form.Item>*/}
                             </Form>
                         </FormContainer>
 
@@ -228,17 +228,17 @@ const ReConnectHubspot: React.FC = () => {
                             </StyledButton>
                         </div>
 
-                        <Alert
-                            message="Important Note"
-                            description="Avoid changing the prefix frequently. If you change the prefix, you will need to reconfigure all metafield mappings and settings."
-                            type="warning"
-                            showIcon
-                            style={{
-                                margin: '24px auto',
-                                textAlign: 'left',
-                                maxWidth: '600px',
-                            }}
-                        />
+                        {/*<Alert*/}
+                        {/*    message="Important Note"*/}
+                        {/*    description="Avoid changing the prefix frequently. If you change the prefix, you will need to reconfigure all metafield mappings and settings."*/}
+                        {/*    type="warning"*/}
+                        {/*    showIcon*/}
+                        {/*    style={{*/}
+                        {/*        margin: '24px auto',*/}
+                        {/*        textAlign: 'left',*/}
+                        {/*        maxWidth: '600px',*/}
+                        {/*    }}*/}
+                        {/*/>*/}
 
                         <Paragraph style={{ marginTop: '24px', fontSize: '14px', color: '#888' }}>
                             You'll be redirected to HubSpot to reauthorize access to your account.
