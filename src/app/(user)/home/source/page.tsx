@@ -16,7 +16,7 @@ import {
   RedoOutlined,
 } from '@ant-design/icons';
 import styled from 'styled-components';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { connectHubspot, getAllSource, softDeleteSource, udpateSource } from '@/service/user/source';
 
 const PageContainer = styled.div`
@@ -389,6 +389,21 @@ const Source = () => {
   const [editingName, setEditingName] = useState<string>('');
   const [isUpdating, setIsUpdating] = useState(false);
 
+  const searchParams = useSearchParams();
+
+
+  useEffect(() => {
+    const isInUsed = searchParams.get('error');
+    if (isInUsed === 'used')
+    {
+      Modal.info({
+        title: 'Error',
+        content: 'This HubSpot account has been connected by another account',
+        onOk() { },
+      });
+    }
+  }, []);
+
   const isMobile = useIsMobile();
 
   const fetchSources = async () => {
@@ -587,7 +602,7 @@ const Source = () => {
       title: 'Platform',
       dataIndex: ['platform', 'name'],
       key: 'platform',
-      render:(name:string) =>{
+      render: (name: string) => {
         return name === 'hubspot' ? 'Hubspot' : 'Google Drive'
       },
     },
@@ -735,7 +750,7 @@ const Source = () => {
                         : 'cyan'
                   }
                 >
-                  {platform.type == 'eCommerce' ?  'Storage' : platform.type  }
+                  {platform.type == 'eCommerce' ? 'Storage' : platform.type}
                 </TypeTag>
               </PlatformTitle>
               <PlatformDescription>{platform.description}</PlatformDescription>
