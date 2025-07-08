@@ -391,18 +391,23 @@ const Source = () => {
 
   const searchParams = useSearchParams();
 
-
   useEffect(() => {
     const isInUsed = searchParams.get('error');
     if (isInUsed === 'used')
     {
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete('error');
+
+      router.replace(newUrl.toString(), undefined);
+
       Modal.info({
         title: 'Error',
-        content: 'This HubSpot account has been connected by another account',
-        onOk() { },
+        content: 'This HubSpot account has been connected by another account!',
+        onOk() {
+        },
       });
     }
-  }, []);
+  }, [searchParams, router]);
 
   const isMobile = useIsMobile();
 
