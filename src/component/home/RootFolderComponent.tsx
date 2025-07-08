@@ -3,7 +3,9 @@ import { useSearchParams } from 'next/navigation';
 
 const RootFolderComponent = () => {
     const searchParams = useSearchParams();
-    const iframeURL = searchParams.get('iframe');
+    const encodedIframeURL = searchParams.get('iframe');
+
+    const iframeURL = encodedIframeURL ? decodeURIComponent(encodedIframeURL) : null;
 
     return (
         <>

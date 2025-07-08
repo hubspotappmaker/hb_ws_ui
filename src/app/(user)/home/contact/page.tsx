@@ -373,40 +373,17 @@ const ContactInfo: React.FC = () => {
       <ContentWrapper>
         <HeroSection>
           <HeroTitle level={1}>
-            Nexus Customer Experience
+            Contact nexce.io
           </HeroTitle>
           <HeroSubtitle>
-            Nexus Customer Experience provides digital transformation consulting services and multi-sector
+            nexce.io provides transformation consulting services and multi-sector
             software solutions for domestic and international businesses.
           </HeroSubtitle>
         </HeroSection>
 
         <ContactSection>
           <Row gutter={[32, 32]}>
-            <Col xs={24} lg={12}>
-              <AddressCard
-                title={
-                  <CardTitle level={3}>
-                    <EnvironmentOutlined />
-                    Head Office
-                  </CardTitle>
-                }
-              >
-                <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                  <div className="address-line">
-                    18/11 Nguyen Du Street
-                  </div>
-                  <div className="address-line">
-                    Nong Trang Ward, Viet Tri City
-                  </div>
-                  <div className="address-line">
-                    Phu Tho Province, Vietnam
-                  </div>
-                </Space>
-              </AddressCard>
-            </Col>
-
-            <Col xs={24} lg={12}>
+            <Col xs={48} lg={24}>
               <GlassCard
                 title={
                   <CardTitle level={3}>
@@ -416,7 +393,7 @@ const ContactInfo: React.FC = () => {
                 }
               >
                 <Space direction="vertical" style={{ width: '100%' }}>
-                  <ContactItem onClick={() => handleContactClick({ type: 'email', value: 'info@onextdigital.com' })}>
+                  <ContactItem onClick={() => handleContactClick({ type: 'email', value: 'info@nexce.io' })}>
                     <div className="contact-icon">
                       <MailOutlined />
                     </div>
@@ -428,19 +405,7 @@ const ContactInfo: React.FC = () => {
                     </ContactText>
                   </ContactItem>
 
-                  <ContactItem onClick={() => handleContactClick({ type: 'phone', value: '+84989302850' })}>
-                    <div className="contact-icon">
-                      <WhatsAppOutlined />
-                    </div>
-                    <ContactText>
-                      <ContactLabel>WhatsApp</ContactLabel>
-                      <ContactValue type="link">
-                        +84 98 930 28 50
-                      </ContactValue>
-                    </ContactText>
-                  </ContactItem>
-
-                  <ContactItem onClick={() => handleContactClick({ type: 'website', value: 'https://onextdigital.com' })}>
+                  <ContactItem onClick={() => handleContactClick({ type: 'website', value: 'https://nexce.io' })}>
                     <div className="contact-icon">
                       <GlobalOutlined />
                     </div>
@@ -475,7 +440,7 @@ const ContactInfo: React.FC = () => {
                     background: '#1877f2',
                     borderColor: '#1877f2'
                   }}
-                  onClick={() => handleSocialClick("https://www.facebook.com/onextdigitalteam")}
+                  onClick={() => handleSocialClick("#")}
                 >
                   <FacebookOutlined />
                   Facebook
@@ -491,7 +456,7 @@ const ContactInfo: React.FC = () => {
                     background: '#0a66c2',
                     borderColor: '#0a66c2'
                   }}
-                  onClick={() => handleSocialClick("https://vn.linkedin.com/company/onextdigital?trk=public_post_feed-actor-name")}
+                  onClick={() => handleSocialClick("#")}
                 >
                   <LinkedinOutlined />
                   LinkedIn
@@ -507,7 +472,7 @@ const ContactInfo: React.FC = () => {
             fontSize: '14px',
             fontWeight: '500'
           }}>
-            © {new Date().getFullYear()} Nexus Customer Experience. All rights reserved.
+            © {new Date().getFullYear()} nexce.io. All rights reserved.
           </Text>
         </FooterSection>
       </ContentWrapper>
