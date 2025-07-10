@@ -728,7 +728,7 @@ const Connect: React.FC = () => {
     //   ),
     // },
     {
-      title: 'Webhook Status',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
       render: (status: string) => (
@@ -741,14 +741,14 @@ const Connect: React.FC = () => {
       ),
     },
     {
-      title: 'Actions',
+      title: 'Action',
       key: 'actions',
       render: (record: any) => (
         <Space>
           <Tooltip
             color='blue'
             placement="top"
-            title={'Enable Real-time syncing'}
+            title={'Enable integration'}
           >
             <Switch
               checked={record.isActive}
