@@ -133,7 +133,7 @@ const ReConnectHubspot: React.FC = () => {
         try
         {
             setLoading(true);
-            const oauthUrl = `https://app-na2.hubspot.com/oauth/authorize?client_id=ed661cf6-11ca-4441-8f9f-dcc884d8e6f9&redirect_uri=https://gdrive.nexce.io/fe/api/hubspot/callback&scope=crm.objects.contacts.write%20crm.objects.deals.read%20crm.objects.deals.write%20crm.objects.contacts.read`
+            const oauthUrl = `https://app-na2.hubspot.com/oauth/authorize?client_id=ed661cf6-11ca-4441-8f9f-dcc884d8e6f9&redirect_uri=https://gdrive.nexce.io/fe/api/hubspot/callback&scope=crm.objects.deals.read%20crm.objects.contacts.read`
             window.location.href = oauthUrl;
         } catch (err)
         {
@@ -200,19 +200,19 @@ const ReConnectHubspot: React.FC = () => {
                                 {/*    // help={prefixError || `${prefix.length}/20 characters`}*/}
                                 {/*    style={{ textAlign: 'left' }}*/}
                                 {/*>*/}
-                                    {/*<Tooltip*/}
-                                    {/*    placement="rightTop"*/}
-                                    {/*    title="We will create custom fields based on Shopify's standard fields. Kindly specify a prefix or leave it blank for these fields"*/}
-                                    {/*    color='blue'*/}
-                                    {/*>*/}
-                                    {/*    <StyledInput*/}
-                                    {/*        placeholder="hubspot_"*/}
-                                    {/*        value={prefix}*/}
-                                    {/*        onChange={handlePrefixChange}*/}
-                                    {/*        showCount*/}
-                                    {/*        maxLength={20}*/}
-                                    {/*    />*/}
-                                    {/*</Tooltip>*/}
+                                {/*<Tooltip*/}
+                                {/*    placement="rightTop"*/}
+                                {/*    title="We will create custom fields based on Shopify's standard fields. Kindly specify a prefix or leave it blank for these fields"*/}
+                                {/*    color='blue'*/}
+                                {/*>*/}
+                                {/*    <StyledInput*/}
+                                {/*        placeholder="hubspot_"*/}
+                                {/*        value={prefix}*/}
+                                {/*        onChange={handlePrefixChange}*/}
+                                {/*        showCount*/}
+                                {/*        maxLength={20}*/}
+                                {/*    />*/}
+                                {/*</Tooltip>*/}
                                 {/*</Form.Item>*/}
                             </Form>
                         </FormContainer>
