@@ -45,7 +45,7 @@ const customItems: CustomMenuItem[] = [
     type: 'group',
     label: 'Support',
     children: [
-      { key: '17', label: 'My account', icon: <BookOutlined />, path: 'https://nexce.io/my-account/' },
+      { key: '17', label: 'My account', icon: <UserOutlined />, path: 'https://nexce.io/my-account/' },
       { key: '13', label: 'User guide', icon: <BookOutlined />, path: 'guide' },
       { key: '11', label: 'Contact', icon: <PhoneOutlined />, path: 'contact' },
       { key: '12', label: 'Billing', icon: <CreditCardOutlined />, path: '/home/billing' },
