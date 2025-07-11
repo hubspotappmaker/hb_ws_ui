@@ -4,6 +4,7 @@ import { Button, Card, Space, Typography, Spin } from 'antd';
 import { LockOutlined, SafetyOutlined, ThunderboltOutlined, RightOutlined } from '@ant-design/icons';
 import { pingMe } from '@/service/user/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
+import axios from 'axios';
 
 const { Title, Text } = Typography;
 
@@ -33,9 +34,35 @@ const SsoPage = () => {
         if (res.status === 200)
         {
           console.log("check response: ", res);
+
+
           localStorage.setItem('role', res.data[0].role);
           localStorage.setItem('email', res.data[0].email);
           localStorage.setItem('name', res.data[0].name);
+
+          const token = localStorage.getItem('access_token');
+          const bodyQueue = localStorage.getItem("queue_hubspot");
+
+          if (bodyQueue)
+          {
+            const submitBody = JSON.parse(bodyQueue);
+            const resQueue = await axios.post('https://gdrive.nexce.io/connect-platform-app/application/connect-gg-driver',
+              submitBody,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Accept': '*/*',
+                  'Authorization': `Bearer ${token}`,
+                }
+              }
+            );
+
+            console.log("check resQueue: ", resQueue);
+            localStorage.removeItem("queue_hubspot");
+          }
+
+
+
           router.push('/home/source');
         } else
         {
