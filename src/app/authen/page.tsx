@@ -71,6 +71,7 @@ const SsoPage = () => {
       } catch
       {
         setChecking(false);
+        router.push('/home/source?error=used');
       }
     };
 
