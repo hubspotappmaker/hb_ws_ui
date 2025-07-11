@@ -521,7 +521,7 @@ const Source = () => {
 
   const handleReauthen = async (platform: string, app_id: string) => {
     console.log("click reauth: ", platform)
-    if (platform === 'hubspot')
+    if (platform === 'HubSpot')
     {
 
       router.push(`/home/create/hubspot/re-auth/${app_id}`)
