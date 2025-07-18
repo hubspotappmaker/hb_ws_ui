@@ -27,6 +27,7 @@ import {
     UserOutlined,
     TagOutlined,
     InsertRowBelowOutlined,
+    TeamOutlined,
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { createTier, getAllTier, getTierDetail, updateTier } from "@/service/admin/tier";
@@ -65,7 +66,7 @@ const TableContainer = styled.div`
     margin-top: 16px;
     
     .ant-table {
-      min-width: 900px;
+      min-width: 1000px;
     }
     
     .ant-table-thead > tr > th,
@@ -114,10 +115,6 @@ interface CreateTierDto {
     name: string;
     connectLimit: number;
     appLimit: number;
-    orderSyncLimit: number;
-    productSyncLimit: number;
-    customerSyncLimit: number;
-    metafieldLimit: number;
 }
 
 type UpdateTierDto = Partial<CreateTierDto>;
@@ -128,10 +125,6 @@ interface Tier {
     isActive: boolean;
     connectLimit: number;
     appLimit: number;
-    orderSyncLimit: number;
-    productSyncLimit: number;
-    customerSyncLimit: number;
-    metafieldLimit: number;
     isDeleted: boolean;
     deletedAt: string | null;
     createdAt: string;
@@ -257,6 +250,7 @@ const TierManager = () => {
                     orderSyncLimit: tierData.orderSyncLimit,
                     productSyncLimit: tierData.productSyncLimit,
                     customerSyncLimit: tierData.customerSyncLimit,
+                    companySyncLimit: tierData.companySyncLimit,
                     metafieldLimit: tierData.metafieldLimit,
                 });
                 setIsEditModalVisible(true);
@@ -356,36 +350,6 @@ const TierManager = () => {
             width: 120,
         },
         {
-            title: 'Sync Limits',
-            key: 'syncLimits',
-            render: (record: Tier) => (
-                <Space direction="vertical" size="small">
-                    <Space size="small">
-                        <ShoppingCartOutlined />
-                        <Tag color='yellow'>Orders: {record.orderSyncLimit}</Tag>
-                    </Space>
-                    <Space size="small">
-                        <InsertRowBelowOutlined />
-                        <Tag color='cyan'>Products: {record.productSyncLimit}</Tag>
-                    </Space>
-                    <Space size="small">
-                        <UserOutlined />
-                        <Tag color='magenta'>Customers: {record.customerSyncLimit}</Tag>
-                    </Space>
-                </Space>
-            ),
-            width: 140,
-        },
-        {
-            title: 'Metafield Limit',
-            dataIndex: 'metafieldLimit',
-            key: 'metafieldLimit',
-            render: (limit: number) => (
-                <Tag color="purple">{limit}</Tag>
-            ),
-            width: 120,
-        },
-        {
             title: 'Status',
             dataIndex: 'isActive',
             key: 'status',
@@ -465,7 +429,7 @@ const TierManager = () => {
                     rowKey="_id"
                     size="middle"
                     loading={loading}
-                    scroll={{ x: isMobile ? 900 : undefined }}
+                    scroll={{ x: isMobile ? 1000 : undefined }}
                 />
             </TableContainer>
 
@@ -521,38 +485,6 @@ const TierManager = () => {
                         rules={[{ required: true, message: 'Please enter app limit' }]}
                     >
                         <InputNumber min={1} placeholder="Enter app limit" style={{ width: '100%' }} />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="orderSyncLimit"
-                        label="Order Sync Limit"
-                        rules={[{ required: true, message: 'Please enter order sync limit' }]}
-                    >
-                        <InputNumber min={1} placeholder="Enter order sync limit" style={{ width: '100%' }} />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="productSyncLimit"
-                        label="Product Sync Limit"
-                        rules={[{ required: true, message: 'Please enter product sync limit' }]}
-                    >
-                        <InputNumber min={1} placeholder="Enter product sync limit" style={{ width: '100%' }} />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="customerSyncLimit"
-                        label="Customer Sync Limit"
-                        rules={[{ required: true, message: 'Please enter customer sync limit' }]}
-                    >
-                        <InputNumber min={1} placeholder="Enter customer sync limit" style={{ width: '100%' }} />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="metafieldLimit"
-                        label="Metafield Limit"
-                        rules={[{ required: true, message: 'Please enter metafield limit' }]}
-                    >
-                        <InputNumber min={1} placeholder="Enter metafield limit" style={{ width: '100%' }} />
                     </Form.Item>
 
                     <Form.Item>

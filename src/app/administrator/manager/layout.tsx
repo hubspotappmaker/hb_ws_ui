@@ -24,7 +24,7 @@ export default function AdminLayout({
 
             case 401:
                 message.info('Your session has expired. Please log in again.');
-                router.push('/authen');
+                router.push('/administrator/signin');
                 break;
 
             case 403:
@@ -140,8 +140,8 @@ export default function AdminLayout({
                             ☰
                         </button>
                         <img
-                            src="https://nexce.io/wp-content/uploads/2025/06/cropped-cropped-NEX-3-e1750753156187.png"
-                            alt="Nexce Digital"
+                            src="https://shopify.nexce.io/connect-platform-app/application/get-avatar/dummy.png"
+                            alt="nexce.io"
                             style={{ height: '28px', marginLeft: '16px' }}
                         />
                     </div>

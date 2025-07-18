@@ -405,7 +405,7 @@ const BillingPage: React.FC = () => {
   }, []);
 
   const handleUpgrade = (tierName: string): void => {
-    window.open('https://app.onextdigital.com/app/shopify-hubspot-sync-app/', '_blank', 'noopener,noreferrer');
+    window.open('https://nexce.io/apps/hubspot-drivebox-intergration-application/', '_blank', 'noopener,noreferrer');
   };
 
   const getFeatureIcon = (featureName: string) => {
@@ -508,38 +508,6 @@ const BillingPage: React.FC = () => {
                       <div className="feature-text">
                         <span className="feature-label">Source Limit</span>
                         <span className="feature-value">{formatNumber(tier.appLimit)}</span>
-                      </div>
-                    </FeatureItem>
-
-                    <FeatureItem>
-                      {getFeatureIcon('Order Sync Limit')}
-                      <div className="feature-text">
-                        <span className="feature-label">Order Sync</span>
-                        <span className="feature-value">{formatNumber(tier.orderSyncLimit)}</span>
-                      </div>
-                    </FeatureItem>
-
-                    <FeatureItem>
-                      {getFeatureIcon('Product Sync Limit')}
-                      <div className="feature-text">
-                        <span className="feature-label">Product Sync</span>
-                        <span className="feature-value">{formatNumber(tier.productSyncLimit)}</span>
-                      </div>
-                    </FeatureItem>
-
-                    <FeatureItem>
-                      {getFeatureIcon('Customer Sync Limit')}
-                      <div className="feature-text">
-                        <span className="feature-label">Customer Sync</span>
-                        <span className="feature-value">{formatNumber(tier.customerSyncLimit)}</span>
-                      </div>
-                    </FeatureItem>
-
-                    <FeatureItem>
-                      {getFeatureIcon('Metafield Limit')}
-                      <div className="feature-text">
-                        <span className="feature-label">Metafield Limit</span>
-                        <span className="feature-value">{formatNumber(tier.metafieldLimit)}</span>
                       </div>
                     </FeatureItem>
                   </FeatureList>

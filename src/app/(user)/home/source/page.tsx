@@ -46,7 +46,7 @@ const HeaderContainer = styled.div`
 const TableContainer = styled.div`
   margin-top: 24px;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: auto;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   
   @media (max-width: 768px) {
@@ -456,7 +456,13 @@ const Source = () => {
     }
   };
 
-  const handleSelectSource = (sourceName: string) => {
+  const handleSelectSource = (sourceName?: string) => {
+    if (!sourceName)
+    {
+      message.error('Please select a valid source.');
+      return;
+    }
+
     setModalVisible(false);
     router.push(`/home/create/${sourceName.toLowerCase()}`);
   };
@@ -615,12 +621,24 @@ const Source = () => {
       title: 'Type',
       dataIndex: ['platform', 'type'],
       key: 'type',
-      render: (type: string) => {
+      render: (type?: string) => {
+        if (!type)
+        {
+          return <Tag color="default">Unknown</Tag>;
+        }
+
         const normalizedType = type.toLowerCase();
         let color = 'blue';
+
         if (normalizedType === 'ecommerce') color = 'green';
-        if (normalizedType === 'crm') color = 'purple';
-        return <Tag color={color}>{normalizedType !== 'ecommerce' ? (type.charAt(0).toUpperCase() + type.slice(1)) : 'Storage'}</Tag>;
+        else if (normalizedType === 'crm') color = 'purple';
+
+        const displayText =
+          normalizedType === 'ecommerce'
+            ? 'Storage'
+            : type.charAt(0).toUpperCase() + type.slice(1);
+
+        return <Tag color={color}>{displayText}</Tag>;
       },
     },
     {
