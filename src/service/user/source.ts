@@ -80,3 +80,8 @@ export const getConnectByUser = async (user_id: string) => {
     const res = await dataxios.get(`/application/get-connection-by-user/${user_id}`)
     return res;
 }
+
+export const getSourceByUser = async (user_id: string) => {
+    const res = await dataxios.get(`/application/get-app-by-user/${user_id}`)
+    return res;
+}

@@ -508,8 +508,8 @@ const UserManager = () => {
             key: 'action',
             render: (_: any, record: Account) => (
                 <Space>
-                    <Button type="primary" onClick={() => navigate.push(`/administrator/manager/user/connect/${record._id}`)}>
-                        Show Connection
+                    <Button type="primary" onClick={() => navigate.push(`/administrator/manager/user/statistics/${record._id}`)}>
+                        Statistics
                     </Button>
                 </Space>
             ),
