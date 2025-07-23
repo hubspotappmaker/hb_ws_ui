@@ -50,3 +50,12 @@ export const udpateConnect = async (body: {
     const res = await dataxios.patch(`/connect/update`, body)
     return res;
 }
+
+export const changeConnectSource = async (id: string, from: string, to: string) => {
+    const res = await dataxios.patch(`/connect/change-source`, {
+        id: id,
+        from: from,
+        to: to
+    })
+    return res;
+}

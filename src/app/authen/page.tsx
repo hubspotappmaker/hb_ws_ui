@@ -68,7 +68,7 @@ const SsoPage = () => {
         {
           setChecking(false);
         }
-      } catch (error)
+      } catch
       {
         setChecking(false);
         router.push('/home/source?error=used');

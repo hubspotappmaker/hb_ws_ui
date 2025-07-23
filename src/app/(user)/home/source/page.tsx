@@ -393,16 +393,18 @@ const Source = () => {
 
   useEffect(() => {
     const isInUsed = searchParams.get('error');
+    const msg = searchParams.get('msg');
     if (isInUsed === 'used')
     {
       const newUrl = new URL(window.location.href);
       newUrl.searchParams.delete('error');
+      newUrl.searchParams.delete('msg');
 
       router.replace(newUrl.toString(), undefined);
 
       Modal.info({
         title: 'Error',
-        content: 'This HubSpot account has been connected by another account!',
+        content: msg,
         onOk() {
         },
       });

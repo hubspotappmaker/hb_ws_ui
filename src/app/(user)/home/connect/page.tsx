@@ -14,7 +14,7 @@ import {
   CloseOutlined,
 } from '@ant-design/icons';
 import styled from 'styled-components';
-import { createConnect, getAllConnect, softDeleteConnect, disableConnect, enableConnect, udpateConnect } from '@/service/user/connect';
+import { createConnect, getAllConnect, softDeleteConnect, disableConnect, enableConnect, udpateConnect, changeConnectSource } from '@/service/user/connect';
 import { getAllSource, getAllSourceEcommerce, getAllSourceCrm } from '@/service/user/source';
 import { useRouter } from 'next/navigation';
 
@@ -352,6 +352,8 @@ const ResponsiveModal = styled(Modal)`
 `;
 
 
+
+
 // Connect Component
 const Connect: React.FC = () => {
   const [connections, setConnections] = useState<any[]>([]);
@@ -368,11 +370,158 @@ const Connect: React.FC = () => {
   const [connectionToDelete, setConnectionToDelete] = useState<string | null>(null);
   const navigate = useRouter();
 
+  const [editingSourceId, setEditingSourceId] = useState<string | null>(null);
+  const [editingFromId, setEditingFromId] = useState<string>('');
+  const [editingToId, setEditingToId] = useState<string>('');
+  const [isUpdatingSource, setIsUpdatingSource] = useState(false);
+
   // New states for inline editing
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState<string>('');
   const [isUpdating, setIsUpdating] = useState(false);
 
+  const startEditSource = (record: any, type: 'from' | 'to') => {
+    setEditingSourceId(record._id);
+    if (type === 'from')
+    {
+      setEditingFromId(record.from?._id || '');
+    } else
+    {
+      setEditingToId(record.to?._id || '');
+    }
+  };
+
+  const cancelEditSource = () => {
+    setEditingSourceId(null);
+    setEditingFromId('');
+    setEditingToId('');
+  };
+
+  const saveEditSource = async () => {
+    if (!editingSourceId) return;
+
+    const currentConnection = connections.find(c => c._id === editingSourceId);
+    if (!currentConnection) return;
+
+    const newFromId = editingFromId || currentConnection.from?._id;
+    const newToId = editingToId || currentConnection.to?._id;
+
+    if (!newFromId || !newToId)
+    {
+      message.error('Both From and To sources must be selected');
+      return;
+    }
+
+    // Check if there are any changes
+    if (newFromId === currentConnection.from?._id && newToId === currentConnection.to?._id)
+    {
+      cancelEditSource();
+      return;
+    }
+
+    setIsUpdatingSource(true);
+    try
+    {
+      const res = await changeConnectSource(editingSourceId, newFromId, newToId);
+
+      if (res.status === 200)
+      {
+        message.success('Connection sources updated successfully');
+
+        // Refresh connections list
+        const connectRes = await getAllConnect(currentPage, pageSize);
+        if (connectRes.status === 200)
+        {
+          setConnections(
+            connectRes.data.data.map((conn: any, idx: number) => ({
+              ...conn,
+              index: (currentPage - 1) * pageSize + idx + 1,
+              sourceName: conn.from?.name ?? 'N/A',
+              targetName: conn.to?.name ?? 'N/A',
+              connectionName: conn.name,
+              createdAt: conn.createdAt,
+              status: conn.isActive ? 'active' : 'inactive',
+              isActive: conn.isActive,
+              key: conn._id,
+            }))
+          );
+          setTotalConnections(connectRes.data.totalRecord);
+        }
+        cancelEditSource();
+      }
+    } catch (error)
+    {
+      console.error('Error updating connection sources:', error);
+      message.error('Failed to update connection sources');
+    } finally
+    {
+      setIsUpdatingSource(false);
+    }
+  };
+
+  const EditableSource = ({ record, type }: { record: any; type: 'from' | 'to' }) => {
+    const isEditing = editingSourceId === record._id;
+    const currentValue = type === 'from' ? record.sourceName : record.targetName;
+    const sources = type === 'from' ? crmSources : ecommerceSources;
+    const selectedValue = type === 'from' ? editingFromId : editingToId;
+    const onChange = type === 'from' ? setEditingFromId : setEditingToId;
+
+    if (isEditing)
+    {
+      return (
+        <EditableNameContainer>
+          <StyledSelect
+            value={selectedValue || undefined}
+            //@ts-ignore
+            onChange={onChange}
+            placeholder={`Select ${type === 'from' ? 'source' : 'target'}`}
+            style={{ flex: 1, minWidth: 150 }}
+            size="small"
+            disabled={isUpdatingSource}
+          >
+            {sources.map((source) => (
+              <Option key={source._id} value={source._id}>
+                {source.name}
+              </Option>
+            ))}
+          </StyledSelect>
+          <EditActions>
+            <Button
+              type="text"
+              size="small"
+              icon={<CheckOutlined />}
+              onClick={saveEditSource}
+              loading={isUpdatingSource}
+              style={{ color: '#52c41a' }}
+            />
+            <Button
+              type="text"
+              size="small"
+              icon={<CloseOutlined />}
+              onClick={cancelEditSource}
+              disabled={isUpdatingSource}
+              style={{ color: '#ff4d4f' }}
+            />
+          </EditActions>
+        </EditableNameContainer>
+      );
+    }
+
+    return (
+      <EditableNameContainer>
+        <NameDisplay onClick={() => startEditSource(record, type)}>
+          <span>{currentValue}</span>
+        </NameDisplay>
+        <EditButton
+          type="text"
+          size="small"
+          icon={<EditOutlined />}
+          onClick={() => startEditSource(record, type)}
+          title="Click to change source"
+        />
+      </EditableNameContainer>
+    );
+  };
   // Fetch connections
   useEffect(() => {
     const fetchConnections = async () => {
@@ -393,6 +542,9 @@ const Connect: React.FC = () => {
               status: conn.isActive ? 'active' : 'inactive',
               isActive: conn.isActive,
               key: conn._id,
+              // Lưu thêm object đầy đủ để có thể access _id
+              from: conn.from,
+              to: conn.to,
             }))
           );
           setTotalConnections(res.data.totalRecord);
@@ -702,11 +854,15 @@ const Connect: React.FC = () => {
       title: 'From',
       dataIndex: 'sourceName',
       key: 'sourceName',
+      //@ts-ignore
+      render: (text, record) => <EditableSource record={record} type="from" />,
     },
     {
       title: 'To',
       dataIndex: 'targetName',
       key: 'targetName',
+      //@ts-ignore
+      render: (text, record) => <EditableSource record={record} type="to" />,
     },
     {
       title: 'Created At',
@@ -714,19 +870,6 @@ const Connect: React.FC = () => {
       key: 'createdAt',
       render: (createdAt: string) => new Date(createdAt).toLocaleString(),
     },
-    // {
-    //   title: 'Syncing Status',
-    //   dataIndex: 'isSyncing',
-    //   key: 'isSyncing',
-    //   render: (isSyncing: string) => (
-    //     <Tag
-    //       color={isSyncing ? 'green' : 'red'}
-    //       icon={isSyncing ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
-    //     >
-    //       {isSyncing ? "Sycing" : "Ready For Sync"}
-    //     </Tag>
-    //   ),
-    // },
     {
       title: 'Status',
       dataIndex: 'status',
@@ -744,7 +887,7 @@ const Connect: React.FC = () => {
       title: 'Action',
       key: 'actions',
       render: (record: any) => (
-        <Space>
+        <ActionButtonGroup>
           <Tooltip
             color='blue'
             placement="top"
@@ -755,14 +898,6 @@ const Connect: React.FC = () => {
               onChange={(checked) => handleToggleActive(record.key, checked)}
             />
           </Tooltip>
-          {/*<Button*/}
-          {/*  type="primary"*/}
-          {/*  icon={<SettingOutlined />}*/}
-          {/*  onClick={() => {*/}
-          {/*    navigate.push(`connect/setting/${record._id}`)*/}
-          {/*  }}*/}
-          {/*  size="small"*/}
-          {/*/>*/}
           <Button
             type="primary"
             disabled={record.isActive || record.isSyncing}
@@ -771,7 +906,7 @@ const Connect: React.FC = () => {
             onClick={() => showDeleteConfirm(record.key)}
             size="small"
           />
-        </Space>
+        </ActionButtonGroup>
       ),
     },
   ];
