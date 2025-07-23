@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Table, Typography, Tag, Pagination, message, Avatar, Space, Switch, Select } from 'antd';
+import { Table, Typography, Tag, Pagination, message, Avatar, Space, Switch, Select, Button } from 'antd';
 import {
     UserOutlined,
     CheckCircleOutlined,
@@ -12,6 +12,7 @@ import {
 import styled from 'styled-components';
 import { changeUserStatus, changeUserTier, getAllAccount } from '@/service/admin/account';
 import { getAllTier } from '@/service/admin/tier';
+import { useRouter } from 'next/navigation';
 
 const PageContainer = styled.div`
   padding: 24px;
@@ -232,6 +233,7 @@ interface TierResponse {
 
 const useIsMobile = () => {
     const [isMobile, setIsMobile] = useState(false);
+
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 768);
         check();
@@ -252,7 +254,7 @@ const UserManager = () => {
     const [switchLoading, setSwitchLoading] = useState<{ [key: string]: boolean }>({});
     const [tierLoading, setTierLoading] = useState<{ [key: string]: boolean }>({});
     const isMobile = useIsMobile();
-
+    const navigate = useRouter();
     const fetchTiers = async () => {
         try
         {
@@ -420,20 +422,6 @@ const UserManager = () => {
             width: 100,
         },
         {
-            title: 'Email Status',
-            dataIndex: 'emailVerified',
-            key: 'emailVerified',
-            render: (verified: boolean) => (
-                <Tag
-                    color={verified ? 'green' : 'orange'}
-                    icon={verified ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
-                >
-                    {verified ? 'Verified' : 'Unverified'}
-                </Tag>
-            ),
-            width: 120,
-        },
-        {
             title: 'Status',
             dataIndex: 'isActive',
             key: 'status',
@@ -514,6 +502,18 @@ const UserManager = () => {
                 </Space>
             ),
             width: 140,
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (_: any, record: Account) => (
+                <Space>
+                    <Button type="primary" onClick={() => navigate.push(`/administrator/manager/user/connect/${record._id}`)}>
+                        Show Connection
+                    </Button>
+                </Space>
+            ),
+            width: 160,
         },
     ];
 

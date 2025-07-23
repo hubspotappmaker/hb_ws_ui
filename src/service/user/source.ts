@@ -75,3 +75,8 @@ export const reAuthenShopidySource = async (id: string, body: {
     const res = await dataxios.put(`/application/reauth-shopify/${id}`, body)
     return res;
 }
+
+export const getConnectByUser = async (user_id: string) => {
+    const res = await dataxios.get(`/application/get-connection-by-user/${user_id}`)
+    return res;
+}
