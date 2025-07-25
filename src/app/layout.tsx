@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <style jsx global>{`
+        <style>{`
           ::-webkit-scrollbar {
             display: none;
           }
