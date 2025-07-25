@@ -467,7 +467,7 @@ const BillingPage: React.FC = () => {
 
         <ScrollContainer>
           <TierContainer>
-            {tiers.map((tier, index) => {
+            {tiers.filter(tier => tier.isActive).map((tier, index) => {
               const isCurrentTier = tier._id === currentUserTier;
               const isPopular = tier.name.toLowerCase().includes('god') || tier.name.toLowerCase().includes('premium');
 
