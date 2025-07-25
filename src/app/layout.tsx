@@ -21,7 +21,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-
+        <style jsx global>{`
+          ::-webkit-scrollbar {
+            display: none;
+          }
+          html {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
         <Script
           type="text/javascript"
           id="hs-script-loader"
