@@ -37,8 +37,8 @@ const customItems: CustomMenuItem[] = [
     type: 'group',
     label: 'Manager',
     children: [
-      { key: '15', label: 'User', icon: <UserOutlined />, path: '/administrator/manager/user' },
-      { key: '17', label: 'Time Line', icon: <FieldTimeOutlined />, path: '/administrator/manager/timeline' },
+      { key: '15', label: 'Accounts', icon: <UserOutlined />, path: '/administrator/manager/user' },
+      { key: '17', label: 'Timelines', icon: <FieldTimeOutlined />, path: '/administrator/manager/timeline' },
       { key: '16', label: 'Tier', icon: <CrownOutlined />, path: '/administrator/manager/tier' },
     ],
   },

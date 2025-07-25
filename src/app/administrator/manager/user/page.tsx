@@ -520,7 +520,7 @@ const UserManager = () => {
     return (
         <PageContainer>
             <HeaderContainer>
-                <StyledTitle level={2}>User Management</StyledTitle>
+                <StyledTitle level={2}>Account Management</StyledTitle>
             </HeaderContainer>
 
             {/* Stats Cards */}
