@@ -15,3 +15,8 @@ export const changeUserTier = async (id: string, tierID: string) => {
     const response = await adminxios.put(`/user/change-tier/${id}?tierID=${tierID}`);
     return response;
 };
+
+export const getSourceAccount = async (page: number, limit: number) => {
+    const response = await adminxios.get(`/user/get-source?page=${page}&limit=${limit}`);
+    return response;
+};
