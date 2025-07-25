@@ -257,14 +257,27 @@ const TimeLinePage = () => {
             dataIndex: 'name',
             key: 'name',
             render: (name: string, record: SourceAccount) => (
-                <Space>
-                    <CloudOutlined style={{ color: record.isActive ? '#1890ff' : '#999' }} />
-                    <span style={{
-                        fontWeight: 500,
-                        color: record.isActive ? '#1a1a1a' : '#999'
-                    }}>
-                        {name || 'N/A'}
-                    </span>
+                <Space direction="vertical" size="small">
+                    {/* Tên tài khoản */}
+                    <Space>
+                        <CloudOutlined style={{ color: record.isActive ? '#1890ff' : '#999' }} />
+                        <span style={{
+                            fontWeight: 500,
+                            color: record.isActive ? '#1a1a1a' : '#999'
+                        }}>
+                            {name || 'N/A'}
+                        </span>
+                    </Space>
+
+                    {/* Email từ credentials nếu có */}
+                    {record.credentials?.email && (
+                        <Space>
+                            <MailOutlined style={{ color: '#666' }} />
+                            <span style={{ color: '#666' }}>
+                                {record.credentials.email}
+                            </span>
+                        </Space>
+                    )}
                 </Space>
             ),
             width: 200,
