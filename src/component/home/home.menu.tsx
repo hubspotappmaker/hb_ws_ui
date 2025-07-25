@@ -19,6 +19,7 @@ import {
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import { useRouter } from 'next/navigation';
+import { pingMe } from '@/service/user/auth';
 
 type CustomMenuItem = {
   key: string;
@@ -80,8 +81,15 @@ const HomeMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =>
     const storedEmail = localStorage.getItem('email');
     setEmail(storedEmail);
   }, []);
-
+  const checkPing = async () => {
+    const response = await pingMe();
+    if (response.status === 401)
+    {
+      router.push('/authen');
+    }
+  }
   const onClick: MenuProps['onClick'] = e => {
+    checkPing();
     const findItem = (items: CustomMenuItem[]): CustomMenuItem | undefined => {
       for (const i of items)
       {

@@ -2,7 +2,7 @@
 import HomeMenu from "@/component/home/home.menu"
 import { pingMe } from "@/service/user/auth";
 import { message } from "antd";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function HomeLayout({
@@ -13,7 +13,7 @@ export default function HomeLayout({
     const router = useRouter();
     const [isMobile, setIsMobile] = useState(false);
     const [menuCollapsed, setMenuCollapsed] = useState(false);
-
+    const pathname = usePathname();
     const ping = async () => {
         const response = await pingMe();
 
@@ -23,8 +23,12 @@ export default function HomeLayout({
                 return;
 
             case 401:
-                message.info('Your session has expired. Please log in again.');
-                router.push('/authen');
+                if (pathname !== '/home/queue')
+                {
+                    message.info('Your session has expired. Please log in again.');
+                    router.push('/authen');
+                }
+                break;
                 break;
 
             case 403:
