@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import StyledComponentsRegistry from "@/lib/registry/registry";
+import Clarity from "@/component/setting/clarity";
 
 export const metadata: Metadata = {
   title: "Google Drive Sync Hubspot Application",
@@ -20,23 +21,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* Clarity script */}
-        <Script
-          id="microsoft-clarity"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(c,l,a,r,i,t,y){
-                c['ClarityObject']=i;c[i]=c[i]||function(){
-                (c[i].q=c[i].q||[]).push(arguments)},c[i].l=1*new Date();
-                t=l.createElement(a),t.async=1,t.src=r,y=l.getElementsByTagName(a)[0];
-                y.parentNode.insertBefore(t,y)
-              })(window, document, 'script', 'https://www.clarity.ms/tag/six6ppq4uu');
-            `,
-          }}
-        />
 
+        <Script
+          type="text/javascript"
+          id="hs-script-loader"
+          async
+          defer
+          src="//js.hs-scripts.com/243127684.js"
+        />
         <StyledComponentsRegistry>
+          <Clarity />
           <AntdRegistry>{children}</AntdRegistry>
         </StyledComponentsRegistry>
       </body>
