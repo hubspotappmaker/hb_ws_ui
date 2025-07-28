@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Typography, Tag, Modal, Pagination, message, Input, Alert } from 'antd';
+import { Table, Button, Typography, Tag, Modal, Pagination, message, Input, Alert, Card } from 'antd';
 import {
   PlusOutlined,
   DeleteOutlined,
@@ -52,20 +52,161 @@ const TableContainer = styled.div`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   
   @media (max-width: 768px) {
-    overflow-x: auto;
-    margin-top: 16px;
-    
-    .ant-table {
-      min-width: 800px;
-    }
-    
-    .ant-table-thead > tr > th,
-    .ant-table-tbody > tr > td {
-      white-space: nowrap;
-      font-size: 12px;
-      padding: 8px 12px;
-    }
+    display: none; // Hide table on mobile
   }
+`;
+
+// Mobile Cards Container
+const MobileCardsContainer = styled.div`
+  display: none;
+  
+  @media (max-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+`;
+
+// Mobile Card Styling
+const MobileCard = styled(Card)`
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+  
+  .ant-card-body {
+    padding: 20px;
+  }
+  
+  .ant-card-head {
+    border-bottom: 1px solid #f0f0f0;
+    min-height: 56px;
+  }
+  
+  .ant-card-head-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+`;
+
+// Card Header with Platform Info
+const CardHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+`;
+
+const PlatformInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const PlatformIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #f6f8ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  img {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
+const PlatformDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const PlatformName = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+`;
+
+// Card Content Sections
+const CardSection = styled.div`
+  margin-bottom: 16px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const SectionLabel = styled.div`
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
+
+const SectionValue = styled.div`
+  font-size: 14px;
+  color: #1a1a1a;
+  font-weight: 500;
+`;
+
+// Card Actions
+const CardActions = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+`;
+
+const CardActionButton = styled(Button)`
+  flex: 1;
+  height: 36px;
+  font-size: 12px;
+  border-radius: 6px;
+  font-weight: 500;
+`;
+
+// Status Badge for Mobile
+const StatusBadge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+
+  background-color: ${(props: any) => props.active ? '#f6ffed' : '#e6f7ff'};
+  color: ${(props: any) => props.active ? '#52c41a' : '#1890ff'};
+  border: 1px solid ${(props: any) => props.active ? '#d9f7be' : '#91d5ff'};
+`;
+
+// Index Badge
+const IndexBadge = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: #1667ff;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
 `;
 
 // Pagination container
@@ -314,6 +455,34 @@ const EditButton = styled(Button)`
   }
 `;
 
+// Mobile Editable Name Component
+const MobileEditableName = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+`;
+
+const MobileNameDisplay = styled.div`
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
+const MobileEditInput = styled(Input)`
+  flex: 1;
+  font-size: 14px;
+`;
+
 // Responsive Modal wrapper
 const ResponsiveModal = styled(Modal)`
   @media (max-width: 768px) {
@@ -369,7 +538,7 @@ const sourcePlatforms = [
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
-    const check = () => setIsMobile(isMobile);
+    const check = () => setIsMobile(window.innerWidth <= 768);
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
@@ -598,6 +767,90 @@ const Source = () => {
     );
   };
 
+  // Mobile Editable Name Component
+  const MobileEditableNameComponent = ({ record }: { record: any }) => {
+    const isEditing = editingId === record._id;
+
+    if (isEditing)
+    {
+      return (
+        <MobileEditableName>
+          <MobileEditInput
+            value={editingName}
+            onChange={(e) => setEditingName(e.target.value)}
+            onKeyDown={handleKeyPress}
+            onBlur={saveEdit}
+            autoFocus
+            placeholder="Enter source name"
+            disabled={isUpdating}
+          />
+          <Button
+            type="text"
+            size="small"
+            icon={<CheckOutlined />}
+            onClick={saveEdit}
+            loading={isUpdating}
+            style={{ color: '#52c41a' }}
+          />
+          <Button
+            type="text"
+            size="small"
+            icon={<CloseOutlined />}
+            onClick={cancelEdit}
+            disabled={isUpdating}
+            style={{ color: '#ff4d4f' }}
+          />
+        </MobileEditableName>
+      );
+    }
+
+    return (
+      <MobileEditableName>
+        <MobileNameDisplay onClick={() => startEdit(record)}>
+          {record.name}
+        </MobileNameDisplay>
+        <Button
+          type="text"
+          size="small"
+          icon={<EditOutlined />}
+          onClick={() => startEdit(record)}
+          title="Click to edit"
+        />
+      </MobileEditableName>
+    );
+  };
+
+  const getPlatformIcon = (platformName: string) => {
+    if (platformName === 'HubSpot')
+    {
+      return <img src="/img/hubspot.png" alt="HubSpot" style={{ width: '24px', height: '24px' }} />;
+    } else if (platformName === 'google_drive')
+    {
+      return <img src="/img/gd-icon.png" alt="Google Drive" style={{ width: '24px', height: '24px' }} />;
+    }
+    return null;
+  };
+
+  const getTypeTag = (type?: string) => {
+    if (!type)
+    {
+      return <Tag color="default">Unknown</Tag>;
+    }
+
+    const normalizedType = type.toLowerCase();
+    let color = 'blue';
+
+    if (normalizedType === 'ecommerce') color = 'green';
+    else if (normalizedType === 'crm') color = 'purple';
+
+    const displayText =
+      normalizedType === 'ecommerce'
+        ? 'Storage'
+        : type.charAt(0).toUpperCase() + type.slice(1);
+
+    return <Tag color={color}>{displayText}</Tag>;
+  };
+
   const columns = [
     {
       title: 'Index',
@@ -702,22 +955,22 @@ const Source = () => {
       <HeaderContainer>
         <StyledTitle level={2}>Sources</StyledTitle>
       </HeaderContainer>
-        <Alert
-                      style={{
-                          width: '100%',
-                          marginTop: 30,
-                          marginBottom: 30,
-                      }}
-                      message="Notice"
-                      description={
-                        <p>
-                          You can create an unlimited number of sources, After you have set up the Google Drive and HubSpot account sources, please go to the <a href="https://gdrive.nexce.io/home/connect"><b>Connect</b></a> page to connect the two data sources together to complete the setup.
-                        </p>
-                      }
-                      type="info"
-                      showIcon
-                      icon={<ExclamationCircleOutlined style={{ color: 'blue' }} />}
-                  /> 
+      <Alert
+        style={{
+          width: '100%',
+          marginTop: 30,
+          marginBottom: 30,
+        }}
+        message="Notice"
+        description={
+          <p>
+            You can create an unlimited number of sources, After you have set up the Google Drive and HubSpot account sources, please go to the <a href="https://gdrive.nexce.io/home/connect"><b>Connect</b></a> page to connect the two data sources together to complete the setup.
+          </p>
+        }
+        type="info"
+        showIcon
+        icon={<ExclamationCircleOutlined style={{ color: 'blue' }} />}
+      />
 
       <ButtonContainer>
         <StyledButton
@@ -730,6 +983,7 @@ const Source = () => {
         </StyledButton>
       </ButtonContainer>
 
+      {/* Desktop Table View */}
       <TableContainer>
         <Table
           columns={columns}
@@ -739,6 +993,82 @@ const Source = () => {
           size="middle"
         />
       </TableContainer>
+
+      {/* Mobile Cards View */}
+      <MobileCardsContainer>
+        {sources.map((record, index) => (
+          <MobileCard
+            key={record._id}
+            style={{ position: 'relative' }}
+          >
+            <IndexBadge>
+              {(currentPage - 1) * pageSize + index + 1}
+            </IndexBadge>
+
+            <CardHeader>
+              <PlatformInfo>
+                <PlatformIcon>
+                  {getPlatformIcon(record.platform.name)}
+                </PlatformIcon>
+                <PlatformDetails>
+                  <PlatformName>
+                    {record.platform.name === 'HubSpot' ? 'HubSpot' : 'Google Drive'}
+                  </PlatformName>
+                  {getTypeTag(record.platform.type)}
+                </PlatformDetails>
+              </PlatformInfo>
+            </CardHeader>
+
+            <CardSection>
+              <SectionLabel>Source Name</SectionLabel>
+              <SectionValue>
+                <MobileEditableNameComponent record={record} />
+              </SectionValue>
+            </CardSection>
+
+            <CardSection>
+              <SectionLabel>Created At</SectionLabel>
+              <SectionValue>
+                {new Date(record.createdAt).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </SectionValue>
+            </CardSection>
+
+            <CardSection>
+              <SectionLabel>Status</SectionLabel>
+              <SectionValue>
+                <StatusBadge>
+                  {record.isActive ? <CheckCircleOutlined /> : <UpCircleOutlined />}
+                  {record.isActive ? 'Connected' : 'Ready for synchronization'}
+                </StatusBadge>
+              </SectionValue>
+            </CardSection>
+
+            <CardActions>
+              <CardActionButton
+                icon={<RedoOutlined />}
+                onClick={() => handleReauthen(record.platform.name, record._id)}
+                type="default"
+              >
+                Re Auth
+              </CardActionButton>
+              <CardActionButton
+                icon={<DeleteOutlined />}
+                onClick={() => showDeleteConfirm(record._id)}
+                type="primary"
+                danger
+              >
+                Delete
+              </CardActionButton>
+            </CardActions>
+          </MobileCard>
+        ))}
+      </MobileCardsContainer>
 
       <PaginationContainer>
         <Pagination

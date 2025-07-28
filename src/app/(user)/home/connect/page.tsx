@@ -21,7 +21,6 @@ import { useRouter } from 'next/navigation';
 const { Title } = Typography;
 const { Option } = Select;
 
-
 // Styled Components Definitions
 const PageContainer = styled.div`
   padding: 24px;
@@ -53,16 +52,7 @@ const TableContainer = styled.div`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   
   @media (max-width: 768px) {
-    margin-top: 16px;
-    overflow-x: auto;
-    
-    .ant-table {
-      min-width: 800px;
-    }
-    
-    .ant-table-tbody > tr > td {
-      white-space: nowrap;
-    }
+    display: none; // Ẩn table trên mobile
   }
 `;
 
@@ -77,10 +67,12 @@ const PaginationContainer = styled.div`
     .ant-pagination {
       flex-wrap: wrap;
       justify-content: center;
-    }
-    
-    .ant-pagination-options {
-      margin-left: 8px;
+      
+      .ant-pagination-item, 
+      .ant-pagination-prev, 
+      .ant-pagination-next {
+        margin: 2px;
+      }
     }
   }
 `;
@@ -192,16 +184,252 @@ const ModalFormGroup = styled.div`
   }
 `;
 
-// New styled components for inline editing
+// Mobile Card Components
+const MobileCardContainer = styled.div`
+  display: none;
+  
+  @media (max-width: 768px) {
+    display: block;
+    gap: 16px;
+  }
+`;
+
+const ConnectionCard = styled.div`
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+`;
+
+const CardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 12px;
+`;
+
+const CardTitle = styled.div`
+  flex: 1;
+  min-width: 0;
+`;
+
+const CardConnectionName = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+  word-break: break-word;
+`;
+
+const CardIndex = styled.span`
+  display: inline-block;
+  background: #f0f6ff;
+  color: #1667ff;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+`;
+
+const IndexBadge = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: #1667ff;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+`;
+
+
+const CardStatus = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+`;
+
+const CardBody = styled.div`
+  margin-bottom: 16px;
+`;
+
+const ConnectionFlow = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+`;
+
+const SourceBox = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+const SourceLabel = styled.div`
+  font-size: 11px;
+  color: #8c8c8c;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
+
+const SourceName = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: #262626;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e6f4ff;
+  word-break: break-word;
+  line-height: 1.4;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+`;
+
+const FlowArrow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1667ff;
+  font-size: 18px;
+  margin: 4px 0;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 8px;
+    background: #e6f4ff;
+    top: -10px;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 8px;
+    background: #e6f4ff;
+    bottom: -10px;
+  }
+`;
+
+const CardMeta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  font-size: 12px;
+  color: #8c8c8c;
+`;
+
+const CardDate = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
+
+const CardActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const MobileActionButton = styled(Button)`
+  padding: 6px 12px;
+  height: auto;
+  font-size: 12px;
+  border-radius: 6px;
+  
+  .anticon {
+    font-size: 14px;
+  }
+`;
+
+const MobileEditSelect = styled(Select)`
+  .ant-select-selector {
+    border-radius: 6px !important;
+    min-height: 36px !important;
+    padding: 6px 11px !important;
+    border: 1px solid #d9d9d9 !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.01) !important;
+    transition: all 0.3s !important;
+    
+    &:hover {
+      border-color: #1667ff !important;
+    }
+  }
+  
+  .ant-select-selection-item {
+    line-height: 24px !important;
+    font-size: 14px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .ant-select-selection-placeholder {
+    line-height: 24px !important;
+    font-size: 14px !important;
+  }
+`;
+
+const MobileSwitch = styled(Switch)`
+  min-width: 44px;
+  height: 22px;
+  
+  .ant-switch-handle {
+    width: 18px;
+    height: 18px;
+    top: 2px;
+  }
+  
+  &.ant-switch-checked .ant-switch-handle {
+    left: calc(100% - 20px);
+  }
+`;
+
+// Styled components for inline editing
 const EditableNameContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
   min-height: 32px;
+  width: 100%;
   
   @media (max-width: 768px) {
-    gap: 4px;
-    min-height: 28px;
+    gap: 6px;
+    min-height: 40px;
+    flex-wrap: nowrap;
   }
 `;
 
@@ -210,43 +438,59 @@ const NameDisplay = styled.div`
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
   transition: all 0.2s;
   flex: 1;
+  min-width: 0;
+  word-break: break-word;
+  line-height: 1.4;
   
   &:hover {
     background-color: #f5f5f5;
   }
   
   @media (max-width: 768px) {
-    padding: 2px 4px;
-    gap: 4px;
-    font-size: 13px;
+    padding: 8px 12px;
+    gap: 6px;
+    font-size: 14px;
+    min-height: 36px;
+    
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
   }
 `;
 
 const EditInput = styled(Input)`
   flex: 1;
+  min-width: 0;
   
   @media (max-width: 768px) {
-    font-size: 13px;
+    font-size: 14px;
+    height: 36px;
   }
 `;
 
 const EditActions = styled.div`
   display: flex;
   gap: 4px;
+  flex-shrink: 0;
   
   @media (max-width: 768px) {
-    gap: 2px;
+    gap: 6px;
   }
 `;
 
 const EditButton = styled(Button)`
   opacity: 0;
   transition: opacity 0.2s;
-  
+  flex-shrink: 0;
+
   ${EditableNameContainer}:hover & {
     opacity: 1;
   }
@@ -254,34 +498,15 @@ const EditButton = styled(Button)`
   @media (max-width: 768px) {
     opacity: 1;
     font-size: 12px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
     .anticon {
       font-size: 12px;
-    }
-  }
-`;
-
-const MobileTableWrapper = styled.div`
-  @media (max-width: 768px) {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    
-    &::-webkit-scrollbar {
-      height: 4px;
-    }
-    
-    &::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 2px;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background: #c1c1c1;
-      border-radius: 2px;
-    }
-    
-    &::-webkit-scrollbar-thumb:hover {
-      background: #a8a8a8;
     }
   }
 `;
@@ -320,7 +545,7 @@ const ResponsiveModal = styled(Modal)`
   @media (max-width: 768px) {
     .ant-modal {
       max-width: calc(100vw - 32px);
-      margin: 0 auto;
+      margin: 16px auto;
       top: 20px;
     }
     
@@ -338,6 +563,8 @@ const ResponsiveModal = styled(Modal)`
     
     .ant-modal-body {
       padding: 16px 20px;
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
     }
     
     .ant-modal-footer {
@@ -346,13 +573,12 @@ const ResponsiveModal = styled(Modal)`
       .ant-btn {
         height: 36px;
         font-size: 14px;
+        flex: 1;
+        margin: 0 4px;
       }
     }
   }
 `;
-
-
-
 
 // Connect Component
 const Connect: React.FC = () => {
@@ -470,21 +696,28 @@ const Connect: React.FC = () => {
     {
       return (
         <EditableNameContainer>
-          <StyledSelect
+          <MobileEditSelect
             value={selectedValue || undefined}
             //@ts-ignore
             onChange={onChange}
             placeholder={`Select ${type === 'from' ? 'source' : 'target'}`}
-            style={{ flex: 1, minWidth: 150 }}
+            style={{ flex: 1, minWidth: 0 }}
             size="small"
             disabled={isUpdatingSource}
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              (option?.children as unknown as string)
+                ?.toLowerCase()
+                ?.includes(input.toLowerCase()) ?? false
+            }
           >
             {sources.map((source) => (
               <Option key={source._id} value={source._id}>
                 {source.name}
               </Option>
             ))}
-          </StyledSelect>
+          </MobileEditSelect>
           <EditActions>
             <Button
               type="text"
@@ -492,7 +725,7 @@ const Connect: React.FC = () => {
               icon={<CheckOutlined />}
               onClick={saveEditSource}
               loading={isUpdatingSource}
-              style={{ color: '#52c41a' }}
+              style={{ color: '#52c41a', width: '28px', height: '28px' }}
             />
             <Button
               type="text"
@@ -500,7 +733,7 @@ const Connect: React.FC = () => {
               icon={<CloseOutlined />}
               onClick={cancelEditSource}
               disabled={isUpdatingSource}
-              style={{ color: '#ff4d4f' }}
+              style={{ color: '#ff4d4f', width: '28px', height: '28px' }}
             />
           </EditActions>
         </EditableNameContainer>
@@ -510,7 +743,7 @@ const Connect: React.FC = () => {
     return (
       <EditableNameContainer>
         <NameDisplay onClick={() => startEditSource(record, type)}>
-          <span>{currentValue}</span>
+          <span title={currentValue}>{currentValue}</span>
         </NameDisplay>
         <EditButton
           type="text"
@@ -522,6 +755,7 @@ const Connect: React.FC = () => {
       </EditableNameContainer>
     );
   };
+
   // Fetch connections
   useEffect(() => {
     const fetchConnections = async () => {
@@ -694,6 +928,114 @@ const Connect: React.FC = () => {
           title="Click to edit"
         />
       </EditableNameContainer>
+    );
+  };
+
+  // Mobile Connection Card Component
+  const MobileConnectionCard: React.FC<{ record: any }> = ({ record }) => {
+    return (
+      <ConnectionCard>
+        <CardHeader>
+          <CardTitle>
+            <IndexBadge>{record.index}</IndexBadge>
+            <CardConnectionName>
+              <EditableConnectionName record={record} />
+            </CardConnectionName>
+          </CardTitle>
+          <CardStatus>
+            <Tag
+              color={record.status === 'active' ? 'green' : 'red'}
+              icon={record.status === 'active' ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+              style={{ margin: 0, marginTop: 30, fontSize: '11px' }}
+            >
+              {record.status.toUpperCase()}
+            </Tag>
+          </CardStatus>
+        </CardHeader>
+
+        <CardBody>
+          <ConnectionFlow>
+            <SourceBox>
+              <SourceLabel>
+                <ApiOutlined style={{ fontSize: '12px' }} />
+                From Source
+              </SourceLabel>
+              <SourceName>
+                <EditableSource record={record} type="from" />
+              </SourceName>
+            </SourceBox>
+
+            <FlowArrow>
+              <div style={{
+                background: '#1667ff',
+                borderRadius: '50%',
+                width: '28px',
+                height: '28px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white'
+              }}>
+                ↓
+              </div>
+            </FlowArrow>
+
+            <SourceBox>
+              <SourceLabel>
+                <ApiOutlined style={{ fontSize: '12px' }} />
+                To Destination
+              </SourceLabel>
+              <SourceName>
+                <EditableSource record={record} type="to" />
+              </SourceName>
+            </SourceBox>
+          </ConnectionFlow>
+        </CardBody>
+
+        <CardMeta>
+          <CardDate>
+            <span>Created: {new Date(record.createdAt).toLocaleDateString()}</span>
+          </CardDate>
+
+          <CardActions>
+            <Tooltip title="Enable integration" placement="top">
+              <MobileSwitch
+                checked={record.isActive}
+                onChange={(checked) => handleToggleActive(record.key, checked)}
+                size="small"
+              />
+            </Tooltip>
+
+            <MobileActionButton
+              type="primary"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => showDeleteConfirm(record.key)}
+              disabled={record.isActive || record.isSyncing}
+            >
+              Delete
+            </MobileActionButton>
+          </CardActions>
+        </CardMeta>
+      </ConnectionCard>
+    );
+  };
+
+  // Mobile Connection List Component
+  const MobileConnectionList: React.FC<{
+    connections: any[],
+    handleToggleActive: (key: string, checked: boolean) => void,
+    showDeleteConfirm: (key: string) => void
+  }> = ({ connections, handleToggleActive, showDeleteConfirm }) => {
+    return (
+      <MobileCardContainer>
+        {connections.map((connection) => (
+          <MobileConnectionCard
+            key={connection.key}
+            record={connection}
+          />
+        ))}
+      </MobileCardContainer>
     );
   };
 
@@ -925,6 +1267,7 @@ const Connect: React.FC = () => {
         </StyledButton>
       </HeaderContainer>
 
+      {/* Desktop Table */}
       <TableContainer>
         <Table
           columns={columns}
@@ -934,6 +1277,13 @@ const Connect: React.FC = () => {
           size="middle"
         />
       </TableContainer>
+
+      {/* Mobile Card Layout */}
+      <MobileConnectionList
+        connections={connections}
+        handleToggleActive={handleToggleActive}
+        showDeleteConfirm={showDeleteConfirm}
+      />
 
       <PaginationContainer>
         <Pagination
@@ -953,7 +1303,7 @@ const Connect: React.FC = () => {
       </PaginationContainer>
 
       {/* Create Connection Modal */}
-      <Modal
+      <ResponsiveModal
         title={
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <div
@@ -1039,10 +1389,10 @@ const Connect: React.FC = () => {
             </StyledSelect>
           </ModalFormGroup>
         </div>
-      </Modal>
+      </ResponsiveModal>
 
       {/* Delete Confirmation Modal */}
-      <Modal
+      <ResponsiveModal
         title="Confirm Delete"
         open={deleteModalVisible}
         onOk={handleDelete}
@@ -1051,7 +1401,7 @@ const Connect: React.FC = () => {
         cancelText="Cancel"
       >
         <p>Are you sure you want to delete this connection?</p>
-      </Modal>
+      </ResponsiveModal>
     </PageContainer>
   );
 };
