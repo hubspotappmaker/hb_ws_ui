@@ -20,3 +20,8 @@ export const getSourceAccount = async (page: number, limit: number) => {
     const response = await adminxios.get(`/user/get-source?page=${page}&limit=${limit}`);
     return response;
 };
+
+export const deleteAccount = async (id: string) => {
+    const response = await adminxios.delete(`/user/delete-account/${id}`);
+    return response;
+};

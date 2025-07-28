@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Table, Typography, Tag, Pagination, message, Avatar, Space, Switch, Select, Button } from 'antd';
+import { Table, Typography, Tag, Pagination, message, Avatar, Space, Switch, Select, Button, Modal } from 'antd';
 import {
     UserOutlined,
     CheckCircleOutlined,
@@ -8,9 +8,10 @@ import {
     MailOutlined,
     CalendarOutlined,
     CrownOutlined,
+    DeleteOutlined,
 } from '@ant-design/icons';
 import styled from 'styled-components';
-import { changeUserStatus, changeUserTier, getAllAccount } from '@/service/admin/account';
+import { changeUserStatus, changeUserTier, deleteAccount, getAllAccount } from '@/service/admin/account';
 import { getAllTier } from '@/service/admin/tier';
 import { useRouter } from 'next/navigation';
 
@@ -343,6 +344,36 @@ const UserManager = () => {
         return true;
     };
 
+    const handleDelete = (userId: string) => {
+        Modal.confirm({
+            title: 'Are you sure you want to delete this account?',
+            content: 'This action cannot be undone.',
+            okText: 'Delete',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk: async () => {
+                try
+                {
+                    const response = await deleteAccount(userId);
+                    if (response.status === 200)
+                    {
+                        message.success('Account deleted successfully');
+                        // refresh table data
+                        fetchAccounts();
+                    } else
+                    {
+                        message.error('Failed to delete account');
+                    }
+                } catch (error)
+                {
+                    console.error('Error deleting account:', error);
+                    message.error('Failed to delete account');
+                }
+            },
+        });
+    };
+
+
     // Handle tier change
     const handleTierChange = async (userId: string, newTierId: string) => {
         setTierLoading(prev => ({ ...prev, [userId]: true }));
@@ -511,6 +542,16 @@ const UserManager = () => {
                     <Button type="primary" onClick={() => navigate.push(`/administrator/manager/user/statistics/${record._id}`)}>
                         Statistics
                     </Button>
+
+                    <Button
+                        onClick={() => handleDelete(record._id)}
+                        style={{
+                            color: 'red'
+                        }}
+                        type="dashed"
+                        icon={<DeleteOutlined />}
+                    />
+
                 </Space>
             ),
             width: 160,
