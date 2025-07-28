@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Typography, Tag, Modal, Pagination, message, Input } from 'antd';
+import { Table, Button, Typography, Tag, Modal, Pagination, message, Input, Alert } from 'antd';
 import {
   PlusOutlined,
   DeleteOutlined,
@@ -12,12 +12,14 @@ import {
   CheckOutlined,
   CloseOutlined,
   DownCircleOutlined,
+  ExclamationCircleOutlined,
   UpCircleOutlined,
   RedoOutlined,
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { connectHubspot, getAllSource, softDeleteSource, udpateSource } from '@/service/user/source';
+import Link from 'next/link';
 
 const PageContainer = styled.div`
   padding: 24px;
@@ -700,6 +702,22 @@ const Source = () => {
       <HeaderContainer>
         <StyledTitle level={2}>Sources</StyledTitle>
       </HeaderContainer>
+        <Alert
+                      style={{
+                          width: '100%',
+                          marginTop: 30,
+                          marginBottom: 30,
+                      }}
+                      message="Notice"
+                      description={
+                        <p>
+                          You can create an unlimited number of sources, After you have set up the Google Drive and HubSpot account sources, please go to the <a href="https://gdrive.nexce.io/home/connect"><b>Connect</b></a> page to connect the two data sources together to complete the setup.
+                        </p>
+                      }
+                      type="info"
+                      showIcon
+                      icon={<ExclamationCircleOutlined style={{ color: 'blue' }} />}
+                  /> 
 
       <ButtonContainer>
         <StyledButton

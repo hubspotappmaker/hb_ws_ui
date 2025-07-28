@@ -763,8 +763,9 @@ const QueueSource = () => {
             </HeaderContainer>
             <Alert
                 style={{
-                    maxWidth: 990,
-                    margin: 30
+                    width: '100%',
+                    marginTop: 30,
+                    marginBottom: 30,
                 }}
                 message="Notice"
                 description="To continue with the setup process, you will need to create a new account or log in to your existing account. This ensures that we can securely store and manage your information, while also allowing you to easily track and complete the remaining steps in the setup process."
