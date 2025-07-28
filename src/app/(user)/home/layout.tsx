@@ -64,6 +64,26 @@ export default function HomeLayout({
 
     return (
         <div style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
+            {/* Sidebar cho desktop */}
+            {!isMobile && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: 280,
+                        height: '100vh',
+                        background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%)',
+                        boxShadow: '4px 0 12px rgba(0, 0, 0, 0.1)',
+                        overflow: 'hidden',
+                        zIndex: 1000,
+                        transition: 'left 0.3s ease-in-out',
+                    }}
+                >
+                    <HomeMenu isMobile={false} />
+                </div>
+            )}
+
             {/* Mobile Overlay */}
             {isMobile && !menuCollapsed && (
                 <div
@@ -80,31 +100,34 @@ export default function HomeLayout({
                 />
             )}
 
-            {/* Menu Sidebar */}
-            <div
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: menuCollapsed && isMobile ? -280 : 0,
-                    width: 280,
-                    height: '100vh',
-                    background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%)',
-                    boxShadow: '4px 0 12px rgba(0, 0, 0, 0.1)',
-                    overflow: 'hidden',
-                    zIndex: 1000,
-                    transition: 'left 0.3s ease-in-out',
-                }}
-            >
-                <HomeMenu
-                    onMenuClick={() => isMobile && setMenuCollapsed(true)}
-                    isMobile={isMobile}
-                />
-            </div>
+            {/* Sidebar cho mobile */}
+            {isMobile && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        right: menuCollapsed ? -280 : 0,
+                        width: 280,
+                        height: '100vh',
+                        background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%)',
+                        boxShadow: '4px 0 12px rgba(0, 0, 0, 0.1)',
+                        overflow: 'hidden',
+                        zIndex: 1000,
+                        transition: 'right 0.3s ease-in-out',
+                    }}
+                >
+                    <HomeMenu
+                        onMenuClick={() => setMenuCollapsed(true)}
+                        isMobile={true}
+                    />
+                </div>
+            )}
 
             {/* Main Content */}
             <div
                 style={{
-                    marginLeft: isMobile ? 0 : menuWidth,
+                    marginLeft: !isMobile ? menuWidth : 0,
+                    marginRight: isMobile ? 0 : undefined,
                     height: '100vh',
                     overflowY: 'auto',
                     background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
@@ -126,28 +149,32 @@ export default function HomeLayout({
                             zIndex: 100,
                         }}
                     >
+                        <img
+                            src="https://nexce.io/wp-content/uploads/2025/06/cropped-cropped-NEX-3-e1750753156187.png"
+                            alt="Nexce Digital"
+                            style={{ height: '28px', marginRight: '16px' }}
+                        />
+                        <div style={{ flex: 1 }} />
                         <button
                             onClick={() => setMenuCollapsed(!menuCollapsed)}
                             style={{
                                 background: 'none',
                                 border: 'none',
                                 color: 'white',
-                                fontSize: '18px',
+                                fontSize: '28px',
                                 cursor: 'pointer',
                                 padding: '8px',
                                 borderRadius: '6px',
                                 transition: 'background-color 0.2s',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
                             }}
                             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
                             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
-                            ☰
+                            <span style={{fontSize: '28px', lineHeight: 1}}>☰</span>
                         </button>
-                        <img
-                            src="https://nexce.io/wp-content/uploads/2025/06/cropped-cropped-NEX-3-e1750753156187.png"
-                            alt="Nexce Digital"
-                            style={{ height: '28px', marginLeft: '16px' }}
-                        />
                     </div>
                 )}
 

@@ -166,14 +166,43 @@ const HomeMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =>
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: menuStyles }} />
+      <style dangerouslySetInnerHTML={{ __html: menuItemStyles }} />
       <div style={{
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        background: 'transparent'
+        background: 'transparent',
+        position: 'relative',
       }}>
+        {/* Nút đóng menu cho mobile */}
+        {isMobile && (
+          <button
+            onClick={onMenuClick}
+            style={{
+              position: 'absolute',
+              top: 12,
+              right: 16,
+              zIndex: 10,
+              background: 'rgba(255,255,255,0.08)',
+              border: 'none',
+              color: 'white',
+              fontSize: 28,
+              borderRadius: '50%',
+              width: 40,
+              height: 40,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              cursor: 'pointer',
+              transition: 'background 0.2s',
+            }}
+            aria-label="Close menu"
+          >
+            ×
+          </button>
+        )}
         {/* Logo Section */}
         <div style={{
           display: 'flex',
@@ -188,7 +217,6 @@ const HomeMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =>
             alt="Nexce Digital"
             style={{
               height: isMobile ? '28px' : '32px',
-              // filter: 'brightness(0) invert(1)',
               transition: 'all 0.2s ease'
             }}
           />
