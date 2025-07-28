@@ -201,69 +201,63 @@ const ConnectionCard = styled.div`
   margin-bottom: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border: 1px solid #f0f0f0;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px);
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+  &:hover, &:active {
+    box-shadow: 0 4px 16px rgba(22,103,255,0.18);
+    transform: translateY(-2px) scale(1.01);
   }
 `;
 
 const CardHeader = styled.div`
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
   margin-bottom: 16px;
-  gap: 12px;
+  gap: 8px;
+  position: relative;
 `;
 
 const CardTitle = styled.div`
   flex: 1;
   min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
 const CardConnectionName = styled.h3`
   font-size: 16px;
   font-weight: 600;
   color: #262626;
-  margin: 0 0 4px 0;
+  margin: 0;
   line-height: 1.4;
   word-break: break-word;
-`;
-
-const CardIndex = styled.span`
-  display: inline-block;
-  background: #f0f6ff;
-  color: #1667ff;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 4px;
-  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const IndexBadge = styled.div`
-  position: absolute;
-  top: 12px;
-  right: 12px;
   background-color: #1667ff;
   color: white;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
+  box-shadow: 0 2px 8px rgba(22,103,255,0.12);
 `;
-
 
 const CardStatus = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
   flex-shrink: 0;
+  min-width: 70px;
 `;
 
 const CardBody = styled.div`
@@ -291,7 +285,7 @@ const SourceLabel = styled.div`
   color: #8c8c8c;
   text-transform: uppercase;
   font-weight: 500;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   letter-spacing: 0.5px;
   display: flex;
   align-items: center;
@@ -302,16 +296,19 @@ const SourceName = styled.div`
   font-size: 14px;
   font-weight: 500;
   color: #262626;
-  padding: 12px 16px;
-  background: white;
+  padding: 10px 14px;
+  background: #fff;
   border-radius: 8px;
   border: 1px solid #e6f4ff;
   word-break: break-word;
   line-height: 1.4;
-  min-height: 44px;
+  min-height: 40px;
   display: flex;
   align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const FlowArrow = styled.div`
@@ -350,6 +347,7 @@ const CardMeta = styled.div`
   border-top: 1px solid #f0f0f0;
   font-size: 12px;
   color: #8c8c8c;
+  gap: 8px;
 `;
 
 const CardDate = styled.div`
@@ -361,7 +359,8 @@ const CardDate = styled.div`
 const CardActions = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+  margin-left: auto;
 `;
 
 const MobileActionButton = styled(Button)`
@@ -369,10 +368,7 @@ const MobileActionButton = styled(Button)`
   height: auto;
   font-size: 12px;
   border-radius: 6px;
-  
-  .anticon {
-    font-size: 14px;
-  }
+  .anticon { font-size: 14px; }
 `;
 
 const MobileEditSelect = styled(Select)`
@@ -406,16 +402,8 @@ const MobileEditSelect = styled(Select)`
 const MobileSwitch = styled(Switch)`
   min-width: 44px;
   height: 22px;
-  
-  .ant-switch-handle {
-    width: 18px;
-    height: 18px;
-    top: 2px;
-  }
-  
-  &.ant-switch-checked .ant-switch-handle {
-    left: calc(100% - 20px);
-  }
+  .ant-switch-handle { width: 18px; height: 18px; top: 2px; }
+  &.ant-switch-checked .ant-switch-handle { left: calc(100% - 20px); }
 `;
 
 // Styled components for inline editing
@@ -936,8 +924,8 @@ const Connect: React.FC = () => {
     return (
       <ConnectionCard>
         <CardHeader>
+          <IndexBadge>{record.index}</IndexBadge>
           <CardTitle>
-            <IndexBadge>{record.index}</IndexBadge>
             <CardConnectionName>
               <EditableConnectionName record={record} />
             </CardConnectionName>
@@ -946,13 +934,12 @@ const Connect: React.FC = () => {
             <Tag
               color={record.status === 'active' ? 'green' : 'red'}
               icon={record.status === 'active' ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
-              style={{ margin: 0, marginTop: 30, fontSize: '11px' }}
+              style={{ margin: 0, fontSize: '11px', minWidth: 60, textAlign: 'center' }}
             >
               {record.status.toUpperCase()}
             </Tag>
           </CardStatus>
         </CardHeader>
-
         <CardBody>
           <ConnectionFlow>
             <SourceBox>
@@ -964,7 +951,6 @@ const Connect: React.FC = () => {
                 <EditableSource record={record} type="from" />
               </SourceName>
             </SourceBox>
-
             <FlowArrow>
               <div style={{
                 background: '#1667ff',
@@ -974,12 +960,12 @@ const Connect: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'white'
+                color: 'white',
+                fontWeight: 700
               }}>
                 ↓
               </div>
             </FlowArrow>
-
             <SourceBox>
               <SourceLabel>
                 <ApiOutlined style={{ fontSize: '12px' }} />
@@ -991,30 +977,29 @@ const Connect: React.FC = () => {
             </SourceBox>
           </ConnectionFlow>
         </CardBody>
-
         <CardMeta>
           <CardDate>
             <span>Created: {new Date(record.createdAt).toLocaleDateString()}</span>
           </CardDate>
-
           <CardActions>
-            <Tooltip title="Enable integration" placement="top">
+            <Tooltip title="Enable/Disable integration" placement="top">
               <MobileSwitch
                 checked={record.isActive}
                 onChange={(checked) => handleToggleActive(record.key, checked)}
                 size="small"
               />
             </Tooltip>
-
-            <MobileActionButton
-              type="primary"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={() => showDeleteConfirm(record.key)}
-              disabled={record.isActive || record.isSyncing}
-            >
-              Delete
-            </MobileActionButton>
+            <Tooltip title={record.isActive ? 'Disable before delete' : 'Delete connection'} placement="top">
+              <MobileActionButton
+                type="primary"
+                danger
+                icon={<DeleteOutlined />}
+                onClick={() => showDeleteConfirm(record.key)}
+                disabled={record.isActive || record.isSyncing}
+              >
+                Delete
+              </MobileActionButton>
+            </Tooltip>
           </CardActions>
         </CardMeta>
       </ConnectionCard>
