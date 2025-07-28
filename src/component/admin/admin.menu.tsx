@@ -17,6 +17,7 @@ import {
   CloudSyncOutlined,
   CrownOutlined,
   FieldTimeOutlined,
+  SaveOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
@@ -39,6 +40,7 @@ const customItems: CustomMenuItem[] = [
     children: [
       { key: '15', label: 'Accounts', icon: <UserOutlined />, path: '/administrator/manager/user' },
       { key: '17', label: 'Timelines', icon: <FieldTimeOutlined />, path: '/administrator/manager/timeline' },
+      { key: '18', label: 'Storage', icon: <SaveOutlined />, path: '/administrator/manager/storage' },
       { key: '16', label: 'Tier', icon: <CrownOutlined />, path: '/administrator/manager/tier' },
     ],
   },
