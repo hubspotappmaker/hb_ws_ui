@@ -1,11 +1,13 @@
 'use client'
 import { getConnectByUser, getSourceByUser } from "@/service/user/source";
 import { useEffect, useState } from "react";
-import { Select, Table, Typography, Space, Spin, Alert, Tag, Button, Modal, Descriptions, Pagination, Card, Row, Col, Statistic, Collapse, Tooltip } from 'antd';
+import { Select, Table, Typography, Space, Spin, Alert, Tag, Button, Modal, Descriptions, Pagination, Card, Row, Col, Statistic, Collapse, Tooltip, Divider, Switch } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined, EyeOutlined, LeftOutlined, DatabaseOutlined, LinkOutlined, BarChartOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import type { ColumnsType } from 'antd/es/table';
-
+import { checkExpired, setExpiredDate, setExpiredStatus } from "@/service/admin/account";
+import { DatePicker, message } from 'antd';
+import dayjs from 'dayjs';
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 
@@ -286,10 +288,119 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
     const [sourceDetailModalVisible, setSourceDetailModalVisible] = useState(false);
     const [selectedConnection, setSelectedConnection] = useState<ConnectionData | null>(null);
     const [selectedSource, setSelectedSource] = useState<SourceData | null>(null);
-
     //filter
     const [connectionDeletedFilter, setConnectionDeletedFilter] = useState<string>('all');
     const [sourceDeletedFilter, setSourceDeletedFilter] = useState<string>('all');
+    //expired manager
+    const [expiredData, setExpiredData] = useState<{
+        isExpired: boolean;
+        expiredDate: string;
+    } | null>(null);
+    const [expiredLoading, setExpiredLoading] = useState(false);
+    // Xóa state datePickerVisible
+
+    const fetchExpiredData = async () => {
+        try
+        {
+            setExpiredLoading(true);
+            const response = await checkExpired(params.id);
+            if (response.status === 200)
+            {
+                console.log("ched setExpiredData: ", response)
+                setExpiredData(response.data);
+            }
+        } catch (error)
+        {
+            message.error('Failed to fetch expired status');
+            console.error('Error fetching expired data:', error);
+        } finally
+        {
+            setExpiredLoading(false);
+        }
+    };
+
+    const handleExpiredStatusChange = async (checked: boolean) => {
+        try
+        {
+            setExpiredLoading(true);
+            const response = await setExpiredStatus(params.id, checked);
+            if (response.status === 200)
+            {
+                message.success(`Expired status ${checked ? 'enabled' : 'disabled'} successfully`);
+                // Refresh expired data
+                await fetchExpiredData();
+            }
+        } catch (error)
+        {
+            message.error('Failed to update expired status');
+            console.error('Error updating expired status:', error);
+        } finally
+        {
+            setExpiredLoading(false);
+        }
+    };
+
+
+    const handleExpiredDateChange = async (date: any) => {
+        if (!date) return;
+
+        // Cập nhật local UI ngay lập tức
+        setExpiredData(prev => prev ? { ...prev, expiredDate: date.toISOString() } : prev);
+
+        try {
+            setExpiredLoading(true);
+            const response = await setExpiredDate(params.id, date.toDate());
+            if (response.status === 200) {
+                message.success('Expired date updated successfully');
+                // Force refresh from server
+                await fetchExpiredData(); // Fetch fresh data
+            }
+        } catch (error) {
+            message.error('Failed to update expired date');
+            console.error('Error updating expired date:', error);
+        } finally {
+            setExpiredLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try
+            {
+                setLoading(true);
+                const [connectionsResponse, sourcesResponse] = await Promise.all([
+                    getConnectByUser(params.id),
+                    getSourceByUser(params.id)
+                ]);
+
+                if (connectionsResponse.status === 200)
+                {
+                    setConnections(connectionsResponse.data);
+                }
+
+                if (sourcesResponse.status === 200)
+                {
+                    setSources(sourcesResponse.data);
+                }
+
+                // Fetch expired data
+                await fetchExpiredData();
+
+                setError(null);
+            } catch (err)
+            {
+                setError('Error fetching data: ' + (err as Error).message);
+            } finally
+            {
+                setLoading(false);
+            }
+        };
+
+        if (params.id)
+        {
+            fetchData();
+        }
+    }, [params.id]);
 
     const getFilteredConnections = () => {
         if (connectionDeletedFilter === 'deleted')
@@ -685,6 +796,8 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
             </HeaderContainer>
 
             {/* Statistics Overview */}
+
+
             <StatisticsContainer>
                 <Row gutter={[16, 16]}>
                     <Col xs={12} sm={8} md={6} lg={4} xl={4}>
@@ -792,6 +905,58 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
                     </Col>
                 </Row>
             </StatisticsContainer>
+
+            <Divider />
+            <StatisticsContainer>
+                <Typography.Title level={3} style={{ marginBottom: 20 }}>
+                    Manager expired status
+                </Typography.Title>
+                <div
+                    style={{
+                        padding: '16px',
+                        border: '1px solid #d9d9d9',
+                        borderRadius: '6px',
+                        backgroundColor: '#fafafa',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 32,
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-between',
+                        minHeight: 90
+                    }}
+                >
+                    <div>
+                        <Text strong>Show message expired date</Text>
+                        <br />
+                        <Text type="secondary" style={{ fontSize: '12px' }}>
+                            Enable to show expiration notifications to user
+                        </Text>
+                    </div>
+                    <Switch
+                        checked={expiredData?.isExpired || false}
+                        onChange={handleExpiredStatusChange}
+                        loading={expiredLoading}
+                        style={{ marginLeft: 16 }}
+                    />
+                    <div style={{ minWidth: 220 }}>
+                        <Text strong style={{ fontSize: 13 }}>Expired Date</Text>
+                        <DatePicker
+                            showTime
+                            value={expiredData?.expiredDate ? dayjs(expiredData.expiredDate) : null}
+                            onChange={handleExpiredDateChange}
+                            style={{ width: '100%', marginTop: 4 }}
+                            disabled={expiredLoading}
+                            disabledDate={(current) => current && current.valueOf() < Date.now()}
+                            format="YYYY-MM-DD HH:mm:ss"
+                            allowClear={false}
+                        />
+                        <Text type="secondary" style={{ fontSize: '12px' }}>
+                            Select a future date and time for the expiration
+                        </Text>
+                    </div>
+                </div>
+            </StatisticsContainer>
+            <Divider />
 
             {/* Collapsible Tables */}
             <Collapse defaultActiveKey={['1', '2']} size="large">
