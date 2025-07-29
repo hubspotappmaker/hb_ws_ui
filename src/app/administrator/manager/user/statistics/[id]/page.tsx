@@ -295,6 +295,8 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
     const [expiredData, setExpiredData] = useState<{
         isExpired: boolean;
         expiredDate: string;
+        name: string;
+        email: string;
     } | null>(null);
     const [expiredLoading, setExpiredLoading] = useState(false);
     // Xóa state datePickerVisible
@@ -794,6 +796,19 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
             <HeaderContainer>
                 <StyledTitle level={2}>User Statistics Dashboard</StyledTitle>
             </HeaderContainer>
+
+            {expiredData && (
+                <StatisticsContainer>
+                    <div style={{ marginBottom: 26}}>
+                    <Tag color="green">
+                        <Text><b>User: </b>{expiredData.name || 'N/A'}</Text>
+                    </Tag>
+                    <Tag color="green">
+                        <Text><b>Email: </b>{expiredData.email || 'N/A'}</Text>
+                    </Tag>
+                    </div>
+                </StatisticsContainer>
+                )}
 
             {/* Statistics Overview */}
 
