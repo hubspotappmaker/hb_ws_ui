@@ -83,19 +83,16 @@ const HomeMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =>
   }, []);
   const checkPing = async () => {
     const response = await pingMe();
-    if (response.status === 401)
-    {
-      router.push('/authen');
+    if (response.status === 401) {
+      router.push('/login');
     }
   }
   const onClick: MenuProps['onClick'] = e => {
     checkPing();
     const findItem = (items: CustomMenuItem[]): CustomMenuItem | undefined => {
-      for (const i of items)
-      {
+      for (const i of items) {
         if (i.key === e.key) return i;
-        if (i.children)
-        {
+        if (i.children) {
           const found = findItem(i.children);
           if (found) return found;
         }
@@ -104,8 +101,7 @@ const HomeMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =>
     };
 
     const clicked = findItem(customItems);
-    if (clicked?.path)
-    {
+    if (clicked?.path) {
       router.push(clicked.path);
       onMenuClick?.(); // Close menu on mobile after click
     }

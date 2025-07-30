@@ -7,7 +7,7 @@ const Logout = () => {
     const router = useRouter();
     useEffect(() => {
         ClearUserLogin();
-        router.push('/authen');
+        router.push('/login');
     }, [])
 }
 

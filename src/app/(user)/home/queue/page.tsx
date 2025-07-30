@@ -390,8 +390,7 @@ const QueueSource = () => {
 
     useEffect(() => {
         const isInFirst = searchParams.get('first');
-        if (isInFirst === 'true')
-        {
+        if (isInFirst === 'true') {
             const newUrl = new URL(window.location.href);
             newUrl.searchParams.delete('first');
 
@@ -406,15 +405,13 @@ const QueueSource = () => {
 
     const fetchSources = () => {
         const raw = localStorage.getItem('queue_hubspot');
-        if (!raw)
-        {
+        if (!raw) {
             setSources([]);
             setTotalRecords(0);
             return;
         }
 
-        try
-        {
+        try {
             const parsed = JSON.parse(raw);
             const sourcesData = [
                 {
@@ -430,8 +427,7 @@ const QueueSource = () => {
             ];
             setSources(sourcesData);
             setTotalRecords(sourcesData.length);
-        } catch (e)
-        {
+        } catch (e) {
             console.error('Invalid localStorage data:', e);
             setSources([]);
             setTotalRecords(0);
@@ -449,29 +445,24 @@ const QueueSource = () => {
     };
 
     const handleDelete = async () => {
-        if (sourceToDelete !== null)
-        {
-            try
-            {
+        if (sourceToDelete !== null) {
+            try {
                 const res = await softDeleteSource(sourceToDelete);
                 setDeleteModalVisible(false);
                 console.log("check res delete: ", res.status);
-                if (res.status == 200)
-                {
+                if (res.status == 200) {
                     fetchSources();
                     message.success('Delete success');
                 }
                 setSourceToDelete(null);
-            } catch (error)
-            {
+            } catch (error) {
                 console.error('Error deleting source:', error);
             }
         }
     };
 
     const handleSelectSource = (sourceName?: string) => {
-        if (!sourceName)
-        {
+        if (!sourceName) {
             message.error('Please select a valid source.');
             return;
         }
@@ -492,63 +483,52 @@ const QueueSource = () => {
     };
 
     const saveEdit = async () => {
-        if (!editingId || !editingName.trim())
-        {
+        if (!editingId || !editingName.trim()) {
             message.error('Source name cannot be empty');
             return;
         }
 
-        if (editingName.trim() === sources.find(s => s._id === editingId)?.name)
-        {
+        if (editingName.trim() === sources.find(s => s._id === editingId)?.name) {
             cancelEdit();
             return;
         }
 
         setIsUpdating(true);
-        try
-        {
+        try {
             const res = await udpateSource({
                 id: editingId,
                 name: editingName.trim()
             });
 
-            if (res.status === 200)
-            {
+            if (res.status === 200) {
                 message.success('Source name updated successfully');
                 fetchSources();
                 cancelEdit();
             }
-        } catch (error)
-        {
+        } catch (error) {
             console.error('Error updating source:', error);
             message.error('Failed to update source name');
-        } finally
-        {
+        } finally {
             setIsUpdating(false);
         }
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter')
-        {
+        if (e.key === 'Enter') {
             saveEdit();
-        } else if (e.key === 'Escape')
-        {
+        } else if (e.key === 'Escape') {
             cancelEdit();
         }
     };
 
     const handleReauthen = async (platform: string, app_id: string) => {
         console.log("click reauth: ", platform)
-        if (platform === 'HubSpot')
-        {
+        if (platform === 'HubSpot') {
 
             router.push(`/home/create/hubspot/re-auth/${app_id}`)
-        } else if (platform === "google_drive")
-        {
+        } else if (platform === "google_drive") {
             router.push(`/home/create/google_drive/re-auth/${app_id}`)
-        } else
-        {
+        } else {
             message.info("Cannot support re auth this platform!")
         }
     }
@@ -556,8 +536,7 @@ const QueueSource = () => {
     const EditableName = ({ record }: { record: any }) => {
         const isEditing = editingId === record._id;
 
-        if (isEditing)
-        {
+        if (isEditing) {
             return (
                 <EditableNameContainer>
                     <EditInput
@@ -636,8 +615,7 @@ const QueueSource = () => {
             dataIndex: ['platform', 'type'],
             key: 'type',
             render: (type?: string) => {
-                if (!type)
-                {
+                if (!type) {
                     return <Tag color="default">Unknown</Tag>;
                 }
 
@@ -733,7 +711,7 @@ const QueueSource = () => {
                     <Button
                         type='primary'
                         onClick={() => {
-                            window.location.href = "/authen";
+                            window.location.href = "https://gdrive.nexce.io/login";
                         }}
                     >
                         Login
@@ -753,7 +731,7 @@ const QueueSource = () => {
                     <Button
                         type='primary'
                         onClick={() => {
-                            window.open("https://nexce.io/my-account/", '_self');
+                            window.location.href = "https://gdrive.nexce.io/register";
                         }}
 
                     >

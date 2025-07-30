@@ -5,7 +5,7 @@ import { useEffect } from "react";
 const Home = () => {
   const router = useRouter();
   useEffect(() => {
-    router.push('/authen');
+    router.push('/login');
   }, [])
   return (
     <>
