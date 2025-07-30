@@ -27,6 +27,35 @@ const SignIn = () => {
         }
     }
 
+    const pointToWp = async (username: string, password: string) => {
+        const response = await fetch("https://nexce.io/wp-json/jwt-auth/v1/token", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+        console.log("WordPress login response:", data);
+
+        if (data?.token) {
+            const jwtToken = data.token;
+            const redirectURL = `https://nexce.io/auto-login?token=${jwtToken}&redirect=/my-account`;
+
+            const newWin = window.open(
+                redirectURL,
+                "_blank",
+                "noopener"
+            );
+
+            window.focus();
+
+        } else {
+            console.error("login wrong:", data);
+        }
+    };
+
+
     useEffect(() => {
         ping();
     }, []);
@@ -44,7 +73,7 @@ const SignIn = () => {
                 localStorage.setItem('role', role);
                 localStorage.setItem('email', email);
                 localStorage.setItem('name', name);
-
+                pointToWp(values.email, values.password);
                 if (role === 'admin') {
                     router.push('/administrator/manager/user');
                 } else {
@@ -270,6 +299,37 @@ const SignIn = () => {
                             }}
                         >
                             Sign In
+                        </Button>
+                    </Form.Item>
+                    <Form.Item style={{ marginBottom: 16 }}>
+                        <Button
+                            type="default"
+                            onClick={() => router.push('/authen')}
+                            style={{
+                                width: '100%',
+                                height: '48px',
+                                borderRadius: '10px',
+                                border: '2px solid #667eea',
+                                color: '#667eea',
+                                fontWeight: 600,
+                                fontSize: '16px',
+                                background: 'transparent',
+                                transition: 'all 0.3s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.background = '#667eea';
+                                e.currentTarget.style.color = 'white';
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.3)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.background = 'transparent';
+                                e.currentTarget.style.color = '#667eea';
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = 'none';
+                            }}
+                        >
+                            SSO with nexce.io
                         </Button>
                     </Form.Item>
                     <div style={{ textAlign: 'center', marginBottom: 16 }}>

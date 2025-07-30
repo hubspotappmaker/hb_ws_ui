@@ -287,6 +287,33 @@ const SignUp = () => {
                             Sign Up
                         </Button>
                     </Form.Item>
+                    <div style={{ textAlign: 'center' }}>Or</div>
+                    <div style={{ textAlign: 'center', marginBottom: 16 }}>
+                        <span style={{ color: '#7f8c8d', fontSize: '14px' }}>
+                            <span
+                                onClick={() => router.push('/authen')}
+                                style={{
+                                    color: '#667eea',
+                                    fontWeight: 500,
+                                    cursor: 'pointer',
+                                    textDecoration: 'underline',
+                                    transition: 'all 0.3s ease'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.color = '#764ba2';
+                                    e.currentTarget.style.textDecoration = 'none';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.color = '#667eea';
+                                    e.currentTarget.style.textDecoration = 'underline';
+                                }}
+                            >
+                                SSO with nexce.io
+                            </span>
+                        </span>
+                    </div>
+
+
                 </Form>
 
                 <div style={{ textAlign: 'center', marginBottom: 16 }}>
