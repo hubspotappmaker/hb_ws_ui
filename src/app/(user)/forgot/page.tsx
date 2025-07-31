@@ -2,19 +2,19 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { loginApi, pingMe, registerApi } from '@/service/user/auth';
+import { UserOutlined, MailOutlined } from '@ant-design/icons';
+import { pingMe } from '@/service/user/auth';
 import Link from 'next/link';
 
 const { Title } = Typography;
 
-interface LoginFormValues {
+interface ForgotPasswordFormValues {
     email: string;
-    password: string;
 }
 
-const SignIn = () => {
+const Forgot = () => {
     const [loading, setLoading] = useState<boolean>(false);
+    const [success, setSuccess] = useState<boolean>(false);
     const router = useRouter();
 
     const ping = async () => {
@@ -27,58 +27,25 @@ const SignIn = () => {
         }
     }
 
-    const pointToWp = async (username: string, password: string) => {
-        const response = await fetch("https://nexce.io/wp-json/jwt-auth/v1/token", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
-        });
-
-        const data = await response.json();
-        console.log("WordPress login response:", data);
-
-        if (data?.token) {
-            const jwtToken = data.token;
-            const redirectURL = `https://nexce.io/auto-login?token=${jwtToken}&redirect=/my-account`;
-
-            const newWin = window.open(
-                redirectURL,
-                "_blank",
-                "noopener"
-            );
-
-            window.focus();
-
-        } else {
-            console.error("login wrong:", data);
-        }
-    };
-
-
     useEffect(() => {
         ping();
     }, []);
 
-    const handleLogin = async (values: LoginFormValues): Promise<void> => {
+    const handleForgotPassword = async (values: ForgotPasswordFormValues): Promise<void> => {
         try {
             setLoading(true);
-            const response = await loginApi(values.email, values.password);
-            console.log('check response value: ', response);
+            const response = await fetch(`https://nexce.io/wp-json/custom/v1/forget_password?email=${values.email}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
-            if (response.status === 201) {
-                const { access_token, role, email, name } = response.data;
-
-                localStorage.setItem('access_token', access_token);
-                localStorage.setItem('role', role);
-                localStorage.setItem('email', email);
-                localStorage.setItem('name', name);
-                pointToWp(values.email, values.password);
-                if (role === 'admin') {
-                    router.push('/administrator/manager/user');
-                } else {
-                    router.push('/home/source');
-                }
+            if (response.status === 200) {
+                setSuccess(true);
+                message.success('Check your email for password reset instructions!');
+            } else {
+                message.error('Something went wrong. Please try again.');
             }
         } catch (error) {
             message.error('Something went wrong!.');
@@ -87,6 +54,96 @@ const SignIn = () => {
             setLoading(false);
         }
     };
+
+    if (success) {
+        return (
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                padding: '20px',
+                position: 'relative',
+                overflow: 'hidden'
+            }}>
+                <Card
+                    style={{
+                        width: '100%',
+                        maxWidth: 420,
+                        boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+                        borderRadius: '16px',
+                        border: 'none',
+                        background: 'rgba(255, 255, 255, 0.95)',
+                        backdropFilter: 'blur(10px)',
+                        position: 'relative',
+                        zIndex: 1,
+                        textAlign: 'center'
+                    }}
+                >
+                    <div style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: 80,
+                        height: 80,
+                        borderRadius: '20px',
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', // blue-purple gradient
+                        marginBottom: 24,
+                        boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)',
+                    }}>
+                        <MailOutlined style={{ fontSize: 32, color: '#fff' }} />
+                    </div>
+
+                    <Title
+                        level={2}
+                        style={{
+                            color: '#2c3e50',
+                            marginBottom: 16,
+                            fontWeight: 600
+                        }}
+                    >
+                        Check Your Email
+                    </Title>
+
+                    <p style={{
+                        color: '#7f8c8d',
+                        marginBottom: 32,
+                        fontSize: '16px',
+                        lineHeight: 1.6
+                    }}>
+                        We've sent password reset instructions to your email address. Please check your inbox and follow the link to reset your password.
+                    </p>
+
+                    <Button
+                        type="primary"
+                        onClick={() => router.push('/login')}
+                        style={{
+                            width: '100%',
+                            height: '48px',
+                            borderRadius: '10px',
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            border: 'none',
+                            fontWeight: 600,
+                            fontSize: '16px',
+                            boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+                            transition: 'all 0.3s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.6)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)';
+                        }}
+                    >
+                        Back to Login
+                    </Button>
+                </Card>
+            </div>
+        );
+    }
 
     return (
         <div style={{
@@ -128,7 +185,7 @@ const SignIn = () => {
                     }
                 }
                 
-                .login-card {
+                .forgot-card {
                     animation: slideIn 0.6s ease-out;
                 }
                 
@@ -138,7 +195,7 @@ const SignIn = () => {
             `}</style>
 
             <Card
-                className="login-card"
+                className="forgot-card"
                 style={{
                     width: '100%',
                     maxWidth: 420,
@@ -203,7 +260,7 @@ const SignIn = () => {
                             fontWeight: 600
                         }}
                     >
-                        Login
+                        Forgot Password
                     </Title>
 
                     <p style={{
@@ -211,51 +268,26 @@ const SignIn = () => {
                         margin: 0,
                         fontSize: '14px'
                     }}>
-                        Sign in to your admin account to continue
+                        Enter your email to receive password reset instructions
                     </p>
                 </div>
 
-                <Form<LoginFormValues>
-                    name="login-form"
-                    onFinish={handleLogin}
-                    initialValues={{ remember: true }}
+                <Form<ForgotPasswordFormValues>
+                    name="forgot-password-form"
+                    onFinish={handleForgotPassword}
                     size="large"
                     layout="vertical"
                 >
                     <Form.Item
                         name="email"
                         rules={[
-                            { required: true, message: 'Please enter your Email!' },
+                            { required: true, message: 'Please enter your email!' },
                             { type: 'email', message: 'Please enter a valid email!' }
                         ]}
                     >
                         <Input
-                            prefix={<UserOutlined style={{ color: '#667eea' }} />}
-                            placeholder="Enter your email"
-                            style={{
-                                borderRadius: '10px',
-                                border: '2px solid #e1e8ed',
-                                padding: '12px 16px',
-                                fontSize: '14px'
-                            }}
-                            onFocus={(e) => {
-                                e.target.style.borderColor = '#667eea';
-                                e.target.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)';
-                            }}
-                            onBlur={(e) => {
-                                e.target.style.borderColor = '#e1e8ed';
-                                e.target.style.boxShadow = 'none';
-                            }}
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: 'Please enter your password!' }]}
-                    >
-                        <Input.Password
-                            prefix={<LockOutlined style={{ color: '#667eea' }} />}
-                            placeholder="Enter your password"
+                            prefix={<MailOutlined style={{ color: '#667eea' }} />}
+                            placeholder="Enter your email address"
                             style={{
                                 borderRadius: '10px',
                                 border: '2px solid #e1e8ed',
@@ -298,53 +330,17 @@ const SignIn = () => {
                                 e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)';
                             }}
                         >
-                            Sign In
+                            Send Reset Link
                         </Button>
                     </Form.Item>
 
-                    <Form.Item style={{ marginBottom: 16 }}>
-                        <Button
-                            type="default"
-                            onClick={() => router.push('/authen')}
-                            style={{
-                                width: '100%',
-                                height: '48px',
-                                borderRadius: '10px',
-                                border: '2px solid #667eea',
-                                color: '#667eea',
-                                fontWeight: 600,
-                                fontSize: '16px',
-                                background: 'transparent',
-                                transition: 'all 0.3s ease'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.background = '#667eea';
-                                e.currentTarget.style.color = 'white';
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.3)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'transparent';
-                                e.currentTarget.style.color = '#667eea';
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = 'none';
-                            }}
-                        >
-                            SSO with nexce.io
-                        </Button>
-                    </Form.Item>
                     <div style={{ textAlign: 'center', marginBottom: 16 }}>
                         <span style={{ color: '#7f8c8d', fontSize: '14px' }}>
-                            Don't have an account?{' '}
-                            <Link href="/register" style={{ color: '#667eea', fontWeight: 500 }}>
-                                Register
+                            Remember your password?{' '}
+                            <Link href="/login" style={{ color: '#667eea', fontWeight: 500 }}>
+                                Sign In
                             </Link>
                         </span>
-                    </div>
-                    <div style={{ textAlign: 'center', marginBottom: 16 }}>
-                        <Link href="/forgot" style={{ color: '#667eea', fontWeight: 500 }}>
-                            Forgot password?
-                        </Link>
                     </div>
                 </Form>
 
@@ -353,4 +349,4 @@ const SignIn = () => {
     );
 };
 
-export default SignIn;
+export default Forgot;
