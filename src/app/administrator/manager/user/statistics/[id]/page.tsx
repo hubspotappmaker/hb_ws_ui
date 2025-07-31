@@ -5,7 +5,7 @@ import { Select, Table, Typography, Space, Spin, Alert, Tag, Button, Modal, Desc
 import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined, EyeOutlined, LeftOutlined, DatabaseOutlined, LinkOutlined, BarChartOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import type { ColumnsType } from 'antd/es/table';
-import { checkExpired, setExpiredDate, setExpiredStatus } from "@/service/admin/account";
+import { checkExpired, countUploadAction, setExpiredDate, setExpiredStatus } from "@/service/admin/account";
 import { DatePicker, message } from 'antd';
 import dayjs from 'dayjs';
 const { Title, Text } = Typography;
@@ -300,44 +300,39 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
     } | null>(null);
     const [expiredLoading, setExpiredLoading] = useState(false);
     // Xóa state datePickerVisible
+    const [uploadCount, setUploadCount] = useState<number>(0);
+    const [uploadRecords, setUploadRecords] = useState<any[]>([]); // lưu record
+    const [uploadModalVisible, setUploadModalVisible] = useState(false);
 
     const fetchExpiredData = async () => {
-        try
-        {
+        try {
             setExpiredLoading(true);
             const response = await checkExpired(params.id);
-            if (response.status === 200)
-            {
+            if (response.status === 200) {
                 console.log("ched setExpiredData: ", response)
                 setExpiredData(response.data);
             }
-        } catch (error)
-        {
+        } catch (error) {
             message.error('Failed to fetch expired status');
             console.error('Error fetching expired data:', error);
-        } finally
-        {
+        } finally {
             setExpiredLoading(false);
         }
     };
 
     const handleExpiredStatusChange = async (checked: boolean) => {
-        try
-        {
+        try {
             setExpiredLoading(true);
             const response = await setExpiredStatus(params.id, checked);
-            if (response.status === 200)
-            {
+            if (response.status === 200) {
                 message.success(`Expired status ${checked ? 'enabled' : 'disabled'} successfully`);
                 // Refresh expired data
                 await fetchExpiredData();
             }
-        } catch (error)
-        {
+        } catch (error) {
             message.error('Failed to update expired status');
             console.error('Error updating expired status:', error);
-        } finally
-        {
+        } finally {
             setExpiredLoading(false);
         }
     };
@@ -367,60 +362,55 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            try
-            {
+            try {
                 setLoading(true);
-                const [connectionsResponse, sourcesResponse] = await Promise.all([
+                const [connectionsResponse, sourcesResponse, uploadCountResponse] = await Promise.all([
                     getConnectByUser(params.id),
-                    getSourceByUser(params.id)
+                    getSourceByUser(params.id),
+                    countUploadAction(params.id),
                 ]);
 
-                if (connectionsResponse.status === 200)
-                {
+                if (connectionsResponse.status === 200) {
                     setConnections(connectionsResponse.data);
                 }
 
-                if (sourcesResponse.status === 200)
-                {
+                if (sourcesResponse.status === 200) {
                     setSources(sourcesResponse.data);
+                }
+                if (uploadCountResponse.status === 200) {
+                    setUploadCount(uploadCountResponse.data.count || 0);
+                    setUploadRecords(uploadCountResponse.data.record || []);
                 }
 
                 // Fetch expired data
                 await fetchExpiredData();
 
                 setError(null);
-            } catch (err)
-            {
+            } catch (err) {
                 setError('Error fetching data: ' + (err as Error).message);
-            } finally
-            {
+            } finally {
                 setLoading(false);
             }
         };
 
-        if (params.id)
-        {
+        if (params.id) {
             fetchData();
         }
     }, [params.id]);
 
     const getFilteredConnections = () => {
-        if (connectionDeletedFilter === 'deleted')
-        {
+        if (connectionDeletedFilter === 'deleted') {
             return connections.filter(c => c.isDeleted);
-        } else if (connectionDeletedFilter === 'active')
-        {
+        } else if (connectionDeletedFilter === 'active') {
             return connections.filter(c => !c.isDeleted);
         }
         return connections; // 'all'
     };
 
     const getFilteredSources = () => {
-        if (sourceDeletedFilter === 'deleted')
-        {
+        if (sourceDeletedFilter === 'deleted') {
             return sources.filter(s => s.isDeleted);
-        } else if (sourceDeletedFilter === 'active')
-        {
+        } else if (sourceDeletedFilter === 'active') {
             return sources.filter(s => !s.isDeleted);
         }
         return sources; // 'all'
@@ -491,36 +481,30 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            try
-            {
+            try {
                 setLoading(true);
                 const [connectionsResponse, sourcesResponse] = await Promise.all([
                     getConnectByUser(params.id),
                     getSourceByUser(params.id)
                 ]);
 
-                if (connectionsResponse.status === 200)
-                {
+                if (connectionsResponse.status === 200) {
                     setConnections(connectionsResponse.data);
                 }
 
-                if (sourcesResponse.status === 200)
-                {
+                if (sourcesResponse.status === 200) {
                     setSources(sourcesResponse.data);
                 }
 
                 setError(null);
-            } catch (err)
-            {
+            } catch (err) {
                 setError('Error fetching data: ' + (err as Error).message);
-            } finally
-            {
+            } finally {
                 setLoading(false);
             }
         };
 
-        if (params.id)
-        {
+        if (params.id) {
             fetchData();
         }
     }, [params.id]);
@@ -547,13 +531,11 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
 
     const getPlatformType = (source: SourceData) => {
         if (source?.credentials?.token_type === 'hubspot_access_token' ||
-            source?.credentials?.token?.token_type === 'hubspot_access_token')
-        {
+            source?.credentials?.token?.token_type === 'hubspot_access_token') {
             return 'HubSpot';
         }
         if (source?.credentials?.token_type === 'google_access_token' ||
-            source?.credentials?.token?.token_type === 'google_access_token')
-        {
+            source?.credentials?.token?.token_type === 'google_access_token') {
             return 'Google Drive';
         }
         return 'Unknown';
@@ -747,8 +729,7 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
     ];
 
 
-    if (loading)
-    {
+    if (loading) {
         return (
             <PageContainer>
                 <div style={{
@@ -763,8 +744,7 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
         );
     }
 
-    if (error)
-    {
+    if (error) {
         return (
             <PageContainer>
                 <Alert
@@ -799,16 +779,16 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
 
             {expiredData && (
                 <StatisticsContainer>
-                    <div style={{ marginBottom: 26}}>
-                    <Tag color="green">
-                        <Text><b>User: </b>{expiredData.name || 'N/A'}</Text>
-                    </Tag>
-                    <Tag color="green">
-                        <Text><b>Email: </b>{expiredData.email || 'N/A'}</Text>
-                    </Tag>
+                    <div style={{ marginBottom: 26 }}>
+                        <Tag color="green">
+                            <Text><b>User: </b>{expiredData.name || 'N/A'}</Text>
+                        </Tag>
+                        <Tag color="green">
+                            <Text><b>Email: </b>{expiredData.email || 'N/A'}</Text>
+                        </Tag>
                     </div>
                 </StatisticsContainer>
-                )}
+            )}
 
             {/* Statistics Overview */}
 
@@ -863,6 +843,28 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
                                 prefix={<BarChartOutlined />}
                                 valueStyle={{ color: '#13c2c2' }}
                             />
+                        </Card>
+                    </Col>
+                    {/* Thêm card hiển thị số lần upload */}
+                    <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+                        <Card>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Statistic
+                                    title="Upload Count"
+                                    value={uploadCount}
+                                    prefix={<BarChartOutlined />}
+                                    valueStyle={{ color: '#722ed1' }}
+                                    style={{ marginBottom: 0 }}
+                                />
+                                <Tooltip title="View upload details">
+                                    <Button
+                                        icon={<EyeOutlined />}
+                                        onClick={() => setUploadModalVisible(true)}
+                                        size="small"
+                                        style={{ marginLeft: 8 }}
+                                    />
+                                </Tooltip>
+                            </div>
                         </Card>
                     </Col>
                 </Row>
@@ -1315,6 +1317,47 @@ const StatisticsPage: React.FC<Props> = ({ params }) => {
                     </Descriptions>
                 )}
             </ResponsiveModal>
+
+            {/* Upload Details Modal */}
+            <Modal
+                title={<div style={{ textAlign: 'center', fontWeight: 600 }}>Upload Details</div>}
+                open={uploadModalVisible}
+                onCancel={() => setUploadModalVisible(false)}
+                footer={[
+                    <Button key="close" onClick={() => setUploadModalVisible(false)}>
+                        Close
+                    </Button>
+                ]}
+                width={700}
+            >
+                <Table
+                    dataSource={uploadRecords}
+                    rowKey="_id"
+                    pagination={{ pageSize: 10 }}
+                    locale={{ emptyText: 'No upload records found.' }}
+                    columns={[
+                        {
+                            title: 'Index',
+                            key: 'index',
+                            width: 70,
+                            align: 'center',
+                            render: (_: any, __: any, idx: number) => idx + 1,
+                        },
+                        {
+                            title: 'Upload Time',
+                            dataIndex: 'createdAt',
+                            key: 'createdAt',
+                            render: (date: string) => new Date(date).toLocaleString(),
+                        },
+                        {
+                            title: 'App Name',
+                            dataIndex: ['app', 'name'],
+                            key: 'name',
+                            render: (_: any, record: any) => record.app?.name || '',
+                        },
+                    ]}
+                />
+            </Modal>
         </PageContainer>
     );
 };

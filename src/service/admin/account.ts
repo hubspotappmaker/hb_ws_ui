@@ -45,3 +45,8 @@ export const setExpiredDate = async (id: string, date: Date) => {
     const response = await adminxios.post(`/user/set-expired-date/${id}/${date}`);
     return response;
 };
+
+export const countUploadAction = async (id: string) => {
+    const response = await adminxios.get(`/logs/count/user/${id}`);
+    return response;
+};
