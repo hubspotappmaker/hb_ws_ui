@@ -9,6 +9,8 @@ import {
     Space,
     Button,
     Avatar,
+    Modal,
+    Spin,
 } from 'antd';
 import {
     CalendarOutlined,
@@ -23,7 +25,7 @@ import {
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
-import { getSourceAccount } from "@/service/admin/account";
+import { countAppUploadAction, getSourceAccount } from "@/service/admin/account";
 
 // Styled components
 const PageContainer = styled.div`
@@ -174,30 +176,51 @@ const TimeLinePage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(50);
     const [loading, setLoading] = useState(false);
+    const [uploadModalVisible, setUploadModalVisible] = useState(false);
+    const [uploadDetails, setUploadDetails] = useState<any[]>([]);
+    const [uploadLoading, setUploadLoading] = useState(false);
+    const [selectedAccount, setSelectedAccount] = useState<SourceAccount | null>(null);
+    const [uploadCounts, setUploadCounts] = useState<{ [key: string]: number }>({});
 
     const router = useRouter();
     const isMobile = useIsMobile();
 
+    // Hàm lấy count cho tất cả sourceAccounts
+    const fetchAllUploadCounts = async (accounts: SourceAccount[]) => {
+        const counts: { [key: string]: number } = {};
+        await Promise.all(accounts.map(async (acc) => {
+            try {
+                const res = await countAppUploadAction(acc._id);
+                if (res.status === 200) {
+                    counts[acc._id] = res.data.count || 0;
+                } else {
+                    counts[acc._id] = 0;
+                }
+            } catch {
+                counts[acc._id] = 0;
+            }
+        }));
+        setUploadCounts(counts);
+    };
+
     const fetchSourceAccounts = async () => {
         setLoading(true);
-        try
-        {
+        try {
             const response = await getSourceAccount(currentPage, pageSize);
             console.log('Source account response:', response);
 
-            if (response.status === 200)
-            {
+            if (response.status === 200) {
                 const { data: accountsData, totalRecord, totalPage } = response.data;
                 setSourceAccounts(accountsData);
                 setTotalRecords(totalRecord);
                 setTotalPages(totalPage);
+                // Lấy count cho từng account
+                fetchAllUploadCounts(accountsData);
             }
-        } catch (error)
-        {
+        } catch (error) {
             console.error('Error fetching source accounts:', error);
             message.error('Failed to fetch source accounts');
-        } finally
-        {
+        } finally {
             setLoading(false);
         }
     };
@@ -210,14 +233,12 @@ const TimeLinePage = () => {
     const getPlatformInfo = (credentials: Credentials) => {
         const tokenType = credentials?.token_type?.toLowerCase() || '';
 
-        if (tokenType.includes('hubspot'))
-        {
+        if (tokenType.includes('hubspot')) {
             return {
                 name: 'HubSpot',
                 color: '#ff6b35'
             };
-        } else
-        {
+        } else {
             return {
                 name: 'Google Drive',
                 color: '#4285f4'
@@ -228,6 +249,24 @@ const TimeLinePage = () => {
     // Handle statistics navigation
     const handleStatistics = (userId: string) => {
         router.push(`/administrator/manager/user/statistics/${userId}`);
+    };
+
+    const handleShowUploadDetails = async (record: SourceAccount) => {
+        setUploadLoading(true);
+        setSelectedAccount(record);
+        try {
+            const response = await countAppUploadAction(record._id);
+            if (response.status === 200) {
+                setUploadDetails(response.data.record || []);
+                setUploadModalVisible(true);
+            } else {
+                message.error('Failed to fetch upload details');
+            }
+        } catch (error) {
+            message.error('Error fetching upload details');
+        } finally {
+            setUploadLoading(false);
+        }
     };
 
     const columns = [
@@ -288,8 +327,7 @@ const TimeLinePage = () => {
             render: (record: SourceAccount) => {
                 const user = record.user;
 
-                if (!user)
-                {
+                if (!user) {
                     return (
                         <Space direction="vertical" size="small">
                             <Tag color="default">No User Data</Tag>
@@ -316,8 +354,7 @@ const TimeLinePage = () => {
             title: 'Status',
             key: 'status',
             render: (record: SourceAccount) => {
-                if (record.isDeleted)
-                {
+                if (record.isDeleted) {
                     return (
                         <Tag color="red" icon={<CloseCircleOutlined />}>
                             Deleted
@@ -349,22 +386,43 @@ const TimeLinePage = () => {
             width: 140,
         },
         {
+            title: 'Uploads',
+            key: 'uploads',
+            render: (record: SourceAccount) => (
+                <Space>
+                    <span style={{ fontWeight: 600 }}>{uploadCounts[record._id] ?? <Spin size="small" />}</span>
+                    <ActionButton
+                        type="default"
+                        icon={<CloudOutlined />}
+                        size="small"
+                        onClick={() => handleShowUploadDetails(record)}
+                        disabled={record.isDeleted}
+                        title="Show upload details"
+                    >
+                        Details
+                    </ActionButton>
+                </Space>
+            ),
+            width: 140,
+        },
+        {
             title: 'Actions',
             key: 'actions',
             render: (record: SourceAccount) => {
                 const hasUser = record.user && record.user._id;
-
                 return (
-                    <ActionButton
-                        type="primary"
-                        icon={<BarChartOutlined />}
-                        size="small"
-                        onClick={() => hasUser && handleStatistics(record.user!._id)}
-                        disabled={!hasUser || record.isDeleted}
-                        title={!hasUser ? 'No user data available' : 'View statistics'}
-                    >
-                        Statistics
-                    </ActionButton>
+                    <>
+                        <ActionButton
+                            type="primary"
+                            icon={<BarChartOutlined />}
+                            size="small"
+                            onClick={() => hasUser && handleStatistics(record.user!._id)}
+                            disabled={!hasUser || record.isDeleted}
+                            title={!hasUser ? 'No user data available' : 'View statistics'}
+                        >
+                            Statistics
+                        </ActionButton>
+                    </>
                 );
             },
             width: 120,
@@ -408,6 +466,43 @@ const TimeLinePage = () => {
                     pageSizeOptions={['25', '50', '75', '100']}
                 />
             </PaginationContainer>
+
+            {/* Modal hiển thị chi tiết upload */}
+            <Modal
+                title={`Upload Details${selectedAccount ? ` - ${selectedAccount.name}` : ''}`}
+                open={uploadModalVisible}
+                onCancel={() => setUploadModalVisible(false)}
+                footer={null}
+                width={600}
+            >
+                {uploadLoading ? (
+                    <Spin />
+                ) : (
+                    <Table
+                        dataSource={uploadDetails}
+                        rowKey="_id"
+                        pagination={false}
+                        size="small"
+                        columns={[
+                            {
+                                title: 'Index',
+                                render: (_: any, __: any, idx: number) => idx + 1,
+                                width: 60,
+                            },
+                            {
+                                title: 'Upload Time',
+                                dataIndex: 'createdAt',
+                                render: (createdAt: string) => new Date(createdAt).toLocaleString(),
+                                width: 180,
+                            },
+                            {
+                                title: 'App Name',
+                                dataIndex: 'app',
+                            },
+                        ]}
+                    />
+                )}
+            </Modal>
         </PageContainer>
     );
 };

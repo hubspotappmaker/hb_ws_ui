@@ -50,3 +50,8 @@ export const countUploadAction = async (id: string) => {
     const response = await adminxios.get(`/logs/count/user/${id}`);
     return response;
 };
+
+export const countAppUploadAction = async (id: string) => {
+    const response = await adminxios.get(`/logs/count/app/${id}`);
+    return response;
+};
