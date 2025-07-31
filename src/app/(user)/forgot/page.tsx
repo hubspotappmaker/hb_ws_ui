@@ -2,14 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
-import { UserOutlined, MailOutlined } from '@ant-design/icons';
+import { UserOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import { pingMe } from '@/service/user/auth';
 import Link from 'next/link';
 
 const { Title } = Typography;
 
 interface ForgotPasswordFormValues {
-    email: string;
+    search: string;
 }
 
 const Forgot = () => {
@@ -34,7 +34,7 @@ const Forgot = () => {
     const handleForgotPassword = async (values: ForgotPasswordFormValues): Promise<void> => {
         try {
             setLoading(true);
-            const response = await fetch(`https://nexce.io/wp-json/custom/v1/forget_password?email=${values.email}`, {
+            const response = await fetch(`https://nexce.io/wp-json/custom/v1/forget_password?search=${encodeURIComponent(values.search)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,6 +53,59 @@ const Forgot = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    // State to track current input value for icon
+    const [inputValue, setInputValue] = useState<string>('');
+
+    // Function to determine input type and get appropriate icon
+    const getInputIcon = () => {
+        if (!inputValue) return <UserOutlined style={{ color: '#667eea' }} />;
+
+        // Check if it's an email
+        if (inputValue.includes('@')) {
+            return <MailOutlined style={{ color: '#667eea' }} />;
+        }
+
+        // Check if it's a phone number (contains only digits and some special chars)
+        if (/^[\d\s\-\+\(\)]+$/.test(inputValue)) {
+            return <PhoneOutlined style={{ color: '#667eea' }} />;
+        }
+
+        // Default to user icon for username
+        return <UserOutlined style={{ color: '#667eea' }} />;
+    };
+
+    // Validation function for search input
+    const validateSearch = (_: any, value: string) => {
+        if (!value) {
+            return Promise.reject(new Error('Please enter your email, phone number, or username!'));
+        }
+
+        // Check if it's a valid email
+        if (value.includes('@')) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+                return Promise.reject(new Error('Please enter a valid email address!'));
+            }
+        }
+
+        // Check if it's a valid phone number
+        if (/^[\d\s\-\+\(\)]+$/.test(value)) {
+            const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+            if (!phoneRegex.test(value)) {
+                return Promise.reject(new Error('Please enter a valid phone number!'));
+            }
+        }
+
+        // For username, just check minimum length
+        if (!value.includes('@') && !/^[\d\s\-\+\(\)]+$/.test(value)) {
+            if (value.length < 3) {
+                return Promise.reject(new Error('Username must be at least 3 characters!'));
+            }
+        }
+
+        return Promise.resolve();
     };
 
     if (success) {
@@ -268,7 +321,7 @@ const Forgot = () => {
                         margin: 0,
                         fontSize: '14px'
                     }}>
-                        Enter your email to receive password reset instructions
+                        Enter your email, phone number, or username to receive password reset instructions
                     </p>
                 </div>
 
@@ -279,15 +332,16 @@ const Forgot = () => {
                     layout="vertical"
                 >
                     <Form.Item
-                        name="email"
+                        name="search"
                         rules={[
-                            { required: true, message: 'Please enter your email!' },
-                            { type: 'email', message: 'Please enter a valid email!' }
+                            { validator: validateSearch }
                         ]}
                     >
                         <Input
-                            prefix={<MailOutlined style={{ color: '#667eea' }} />}
-                            placeholder="Enter your email address"
+                            prefix={getInputIcon()}
+                            placeholder="Enter your email, phone number, or username"
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
                             style={{
                                 borderRadius: '10px',
                                 border: '2px solid #e1e8ed',
