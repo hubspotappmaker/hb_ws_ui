@@ -55,10 +55,11 @@ const TableContainer = styled.div`
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  overflow-x: auto;
+  overflow-x: auto !important;
   
   .ant-table {
     min-width: 1200px;
+    width: max-content;
   }
   
   @media (max-width: 768px) {
@@ -446,7 +447,7 @@ const TimeLinePage = () => {
                     rowKey="_id"
                     size="middle"
                     loading={loading}
-                    scroll={{ x: 1200 }}
+                    scroll={{ x: 'max-content' }}
                 />
             </TableContainer>
 
@@ -498,6 +499,7 @@ const TimeLinePage = () => {
                             {
                                 title: 'App Name',
                                 dataIndex: 'app',
+                                render: (_: any, record: any) => selectedAccount?.name?.toString() || "",
                             },
                         ]}
                     />
