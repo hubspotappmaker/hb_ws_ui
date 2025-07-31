@@ -58,8 +58,9 @@ const TableContainer = styled.div`
   width: 100%;
 
   .ant-table {
-    min-width: 1200px;
-    width: max-content;
+    width: 100%;
+    /* min-width: 1200px; */
+    /* width: max-content; */
   }
 
   @media (max-width: 768px) {
