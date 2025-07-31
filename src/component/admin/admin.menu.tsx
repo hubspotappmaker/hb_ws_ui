@@ -18,6 +18,8 @@ import {
   CrownOutlined,
   FieldTimeOutlined,
   SaveOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
@@ -69,9 +71,11 @@ const mapToAntdItems = (items: CustomMenuItem[]): MenuProps['items'] => {
 interface HomeMenuProps {
   onMenuClick?: () => void;
   isMobile?: boolean;
+  collapsed?: boolean;
+  onCollapse?: (collapsed: boolean) => void;
 }
 
-const AdminMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) => {
+const AdminMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false, collapsed = false, onCollapse }) => {
   const router = useRouter();
   const [email, setEmail] = React.useState<string | null>(null);
 
@@ -83,11 +87,9 @@ const AdminMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =
 
   const onClick: MenuProps['onClick'] = e => {
     const findItem = (items: CustomMenuItem[]): CustomMenuItem | undefined => {
-      for (const i of items)
-      {
+      for (const i of items) {
         if (i.key === e.key) return i;
-        if (i.children)
-        {
+        if (i.children) {
           const found = findItem(i.children);
           if (found) return found;
         }
@@ -96,8 +98,7 @@ const AdminMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =
     };
 
     const clicked = findItem(customItems);
-    if (clicked?.path)
-    {
+    if (clicked?.path) {
       router.push(clicked.path);
       onMenuClick?.(); // Close menu on mobile after click
     }
@@ -158,15 +159,15 @@ const AdminMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: menuStyles }} />
+      <style dangerouslySetInnerHTML={{ __html: menuItemStyles }} />
       <div style={{
-        width: '100%',
+        width: collapsed ? 80 : '100%', // Điều chỉnh chiều rộng khi thu nhỏ
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
         background: 'transparent'
       }}>
-        {/* Logo Section */}
+        {/* Logo Section + Collapse Button */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -174,24 +175,39 @@ const AdminMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
           background: 'rgba(255, 255, 255, 0.05)',
           backdropFilter: 'blur(10px)',
+          justifyContent: collapsed ? 'center' : 'space-between'
         }}>
-          <img
-            src="https://nexce.io/wp-content/uploads/2025/06/cropped-cropped-NEX-3-e1750753156187.png"
-            alt="Nexce Digital"
+          {!collapsed && (
+            <>
+              <img
+                src="https://nexce.io/wp-content/uploads/2025/06/cropped-cropped-NEX-3-e1750753156187.png"
+                alt="Nexce Digital"
+                style={{
+                  height: isMobile ? '28px' : '32px',
+                  transition: 'all 0.2s ease'
+                }}
+              />
+              <h4
+                style={{
+                  color: 'white',
+                  marginLeft: 20
+                }}
+              >
+                Admin Dashboard
+              </h4>
+            </>
+          )}
+          <div
             style={{
-              height: isMobile ? '28px' : '32px',
-              // filter: 'brightness(0) invert(1)',
-              transition: 'all 0.2s ease'
-            }}
-          />
-          <h4
-            style={{
+              marginLeft: collapsed ? 0 : 'auto',
+              cursor: 'pointer',
               color: 'white',
-              marginLeft: 20
+              fontSize: 20,
             }}
+            onClick={() => onCollapse?.(!collapsed)}
           >
-            Admin Dashboard
-          </h4>
+            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          </div>
         </div>
 
         {/* Menu Section */}
@@ -202,11 +218,12 @@ const AdminMenu: React.FC<HomeMenuProps> = ({ onMenuClick, isMobile = false }) =
             theme="dark"
             items={mapToAntdItems(customItems)}
             style={menuStyles}
+            inlineCollapsed={collapsed} // Thêm prop này
           />
         </div>
 
         {/* User Info Section */}
-        {email && (
+        {!collapsed && email && (
           <div style={{
             padding: '16px 20px',
             borderTop: '1px solid rgba(255, 255, 255, 0.1)',

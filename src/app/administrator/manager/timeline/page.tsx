@@ -53,18 +53,18 @@ const HeaderContainer = styled.div`
 const TableContainer = styled.div`
   margin-top: 24px;
   border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   overflow-x: auto !important;
-  
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  width: 100%;
+
   .ant-table {
     min-width: 1200px;
     width: max-content;
   }
-  
+
   @media (max-width: 768px) {
     margin-top: 16px;
-    
+
     .ant-table-thead > tr > th,
     .ant-table-tbody > tr > td {
       white-space: nowrap;
@@ -447,7 +447,7 @@ const TimeLinePage = () => {
                     rowKey="_id"
                     size="middle"
                     loading={loading}
-                    scroll={{ x: 'max-content' }}
+                    scroll={{ x: 1200 }}
                 />
             </TableContainer>
 

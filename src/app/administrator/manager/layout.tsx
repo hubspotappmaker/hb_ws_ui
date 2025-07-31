@@ -12,13 +12,12 @@ export default function AdminLayout({
 }>) {
     const router = useRouter();
     const [isMobile, setIsMobile] = useState(false);
-    const [menuCollapsed, setMenuCollapsed] = useState(false);
+    const [menuCollapsed, setMenuCollapsed] = useState(true);
 
     const ping = async () => {
         const response = await pingMe();
 
-        switch (response.status)
-        {
+        switch (response.status) {
             case 200:
                 return;
 
@@ -44,8 +43,7 @@ export default function AdminLayout({
         const checkScreenSize = () => {
             const mobile = window.innerWidth < 768;
             setIsMobile(mobile);
-            if (mobile)
-            {
+            if (mobile) {
                 setMenuCollapsed(true);
             }
         };
@@ -56,7 +54,7 @@ export default function AdminLayout({
         return () => window.removeEventListener('resize', checkScreenSize);
     }, []);
 
-    const menuWidth = isMobile ? (menuCollapsed ? 0 : 280) : 280;
+    const menuWidth = isMobile ? (menuCollapsed ? 0 : 280) : (menuCollapsed ? 80 : 280);
 
     return (
         <div style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
@@ -82,18 +80,20 @@ export default function AdminLayout({
                     position: 'fixed',
                     top: 0,
                     left: menuCollapsed && isMobile ? -280 : 0,
-                    width: 280,
+                    width: menuCollapsed ? 80 : 280,
                     height: '100vh',
                     background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%)',
                     boxShadow: '4px 0 12px rgba(0, 0, 0, 0.1)',
                     overflow: 'hidden',
                     zIndex: 1000,
-                    transition: 'left 0.3s ease-in-out',
+                    transition: 'left 0.3s ease-in-out, width 0.3s cubic-bezier(0.4,0,0.2,1)',
                 }}
             >
                 <AdminMenu
                     onMenuClick={() => isMobile && setMenuCollapsed(true)}
                     isMobile={isMobile}
+                    collapsed={menuCollapsed}
+                    onCollapse={setMenuCollapsed}
                 />
             </div>
 
