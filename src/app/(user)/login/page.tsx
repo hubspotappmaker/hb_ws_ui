@@ -73,7 +73,7 @@ const SignIn = () => {
                 localStorage.setItem('role', role);
                 localStorage.setItem('email', email);
                 localStorage.setItem('name', name);
-                pointToWp(values.email, values.password);
+                await pointToWp(values.email, values.password);
                 if (role === 'admin') {
                     router.push('/administrator/manager/user');
                 } else {
