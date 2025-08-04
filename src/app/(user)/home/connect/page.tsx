@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Table, Select, Button, Input, Space, Typography, Tag, Switch, Modal, Pagination, message, Tooltip } from 'antd';
+import { Table, Select, Button, Input, Space, Typography, Tag, Switch, Modal, Pagination, message, Tooltip, Alert } from 'antd';
 import {
   PlusOutlined,
   DeleteOutlined,
@@ -12,6 +12,7 @@ import {
   EditOutlined,
   CheckOutlined,
   CloseOutlined,
+  ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { createConnect, getAllConnect, softDeleteConnect, disableConnect, enableConnect, udpateConnect, changeConnectSource } from '@/service/user/connect';
@@ -1242,6 +1243,7 @@ const Connect: React.FC = () => {
     <PageContainer>
       <HeaderContainer>
         <StyledTitle level={2}>Connect</StyledTitle>
+
         <StyledButton
           type="primary"
           icon={<PlusOutlined />}
@@ -1251,7 +1253,22 @@ const Connect: React.FC = () => {
           Create Connection
         </StyledButton>
       </HeaderContainer>
-
+      <Alert
+        style={{
+          width: '100%',
+          marginTop: 30,
+          marginBottom: 30,
+        }}
+        message="Notice"
+        description={
+          <p>
+            After connecting, you need to display the “Drivebox Integration by nexce.io” card on the Contact or Deal screen in order to use the integration. See the instructions <a target='_blank' href="https://nexce.io/guides/how-to-display-hubspot-ui-card/"><b>here</b></a>.
+          </p>
+        }
+        type="info"
+        showIcon
+        icon={<ExclamationCircleOutlined style={{ color: 'blue' }} />}
+      />
       {/* Desktop Table */}
       <TableContainer>
         <Table
