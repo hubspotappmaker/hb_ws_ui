@@ -508,14 +508,27 @@ const ResponsiveModal = styled(Modal)`
 
 const sourcePlatforms = [
   {
-    name: 'google_drive',
+    name: 'Google Drive',
     description: 'Connect your Google Drive to import your files.',
     icon:
       <img
         style={{
           width: 32
         }}
-        src="/img/gd-icon.png" alt="Shopify" />
+        src="/img/gd-icon.png" alt="Shpify" />
+    ,
+    type: 'eCommerce',
+    logo: '/img/gd-icon.png',
+  },
+  {
+    name: 'Google Workspace',
+    description: 'Connect your Google Drive to import your files.',
+    icon:
+      <img
+        style={{
+          width: 32
+        }}
+        src="/img/gd-icon.png" alt="" />
     ,
     type: 'eCommerce',
     logo: '/img/gd-icon.png',
@@ -630,14 +643,29 @@ const Source = () => {
   };
 
   const handleSelectSource = (sourceName?: string) => {
+    console.log("check sourceName: ", sourceName);
     if (!sourceName)
     {
       message.error('Please select a valid source.');
       return;
     }
 
-    setModalVisible(false);
-    router.push(`/home/create/${sourceName.toLowerCase()}`);
+    console.log("check sourceName: ", sourceName);
+
+    if (sourceName === 'Google Drive')
+    {
+      router.push(`/home/create/google_drive`);
+    } else if (sourceName === 'HubSpot')
+    {
+      router.push(`/home/create/hubspot`);
+    }
+    else if (sourceName === 'Google Workspace')
+    {
+      router.push(`/home/create/google_workspace`);
+    }
+
+    // setModalVisible(false);
+    // router.push(`/home/create/${sourceName.toLowerCase()}`);
   };
 
   // New functions for inline editing
@@ -1113,7 +1141,7 @@ const Source = () => {
             </PlatformIconSection>
             <PlatformContentSection>
               <PlatformTitle>
-                {platform.name === 'google_drive' ? "Google Drive" : platform.name}
+                {platform.name}
                 <TypeTag
                   color={
                     platform.type === 'eCommerce'

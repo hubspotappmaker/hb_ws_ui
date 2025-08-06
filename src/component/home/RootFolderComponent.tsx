@@ -1,12 +1,15 @@
 'use client';
 import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 const RootFolderComponent = () => {
     const searchParams = useSearchParams();
     const encodedIframeURL = searchParams.get('iframe');
 
     const iframeURL = encodedIframeURL ? decodeURIComponent(encodedIframeURL) : null;
-
+    useEffect(() => {
+        console.log("check iframeURL: ", iframeURL);
+    }, [])
     return (
         <>
             {iframeURL ? (
