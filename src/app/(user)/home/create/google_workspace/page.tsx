@@ -52,45 +52,51 @@ export default function TokenPage() {
 
     const fetchDrives = async (accessToken: string) => {
         setFetchingDrives(true);
-        try {
+        try
+        {
             const response = await axios.get('https://www.googleapis.com/drive/v3/drives', {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                     'Accept': 'application/json'
                 }
             });
-            
+
             const data: DriveListResponse = response.data;
             setDrives(data.drives || []);
-            
-            if (data.drives && data.drives.length > 0) {
+
+            if (data.drives && data.drives.length > 0)
+            {
                 notification.success({
                     message: 'Drives Fetched Successfully',
                     description: `Found ${data.drives.length} shared drive(s)`,
                     duration: 3,
                 });
-            } else {
+            } else
+            {
                 notification.warning({
                     message: 'No Shared Drives Found',
                     description: 'You don\'t have access to any shared drives. You can still use your personal drive.',
                     duration: 5,
                 });
             }
-        } catch (err: any) {
+        } catch (err: any)
+        {
             console.error('Error fetching drives:', err);
             notification.error({
                 message: 'Failed to Fetch Drives',
                 description: err.response?.data?.error?.message || err.message || 'An error occurred while fetching drives',
                 duration: 6,
             });
-        } finally {
+        } finally
+        {
             setFetchingDrives(false);
         }
     };
 
     const handleFile = async (file: File) => {
         setLoading(true);
-        try {
+        try
+        {
             const text = await file.text();
             const json = JSON.parse(text);
 
@@ -100,7 +106,8 @@ export default function TokenPage() {
             setToken(data.token);
             console.log('Generated token:', data.token);
 
-            if (data.token) {
+            if (data.token)
+            {
                 // Fetch drives after getting token
                 await fetchDrives(data.token);
             }
@@ -110,14 +117,16 @@ export default function TokenPage() {
                 description: 'Your Google Drive access token has been created and is ready to use.',
                 duration: 4.5,
             });
-        } catch (err: any) {
+        } catch (err: any)
+        {
             console.error('Token generation error:', err);
             notification.error({
                 message: 'Token Generation Failed',
                 description: err.response?.data?.error || err.message || 'An unexpected error occurred',
                 duration: 6,
             });
-        } finally {
+        } finally
+        {
             setLoading(false);
         }
 
@@ -134,16 +143,19 @@ export default function TokenPage() {
     };
 
     const handleContinue = () => {
-        if (selectedDrive) {
+        if (selectedDrive)
+        {
             router.push(`/home/root?iframe=https://gdrive.nexce.io/fe/driverootpicker?access_token=${token}&driveId=${selectedDrive.id}`);
         }
     };
 
     const copyToClipboard = async () => {
-        try {
+        try
+        {
             await navigator.clipboard.writeText(token);
             message.success('Token copied to clipboard!');
-        } catch (err) {
+        } catch (err)
+        {
             message.error('Failed to copy token');
         }
     };
@@ -251,7 +263,7 @@ export default function TokenPage() {
                                 showIcon
                                 style={{ marginBottom: '1.5rem' }}
                             />
-                            
+
                             <Row gutter={[16, 16]}>
                                 {drives.map((drive) => (
                                     <Col xs={24} sm={12} md={8} key={drive.id}>
@@ -266,12 +278,12 @@ export default function TokenPage() {
                                             onClick={() => handleDriveSelect(drive)}
                                         >
                                             <div style={{ textAlign: 'center' }}>
-                                                <DatabaseOutlined 
-                                                    style={{ 
-                                                        fontSize: '2.5rem', 
+                                                <DatabaseOutlined
+                                                    style={{
+                                                        fontSize: '2.5rem',
                                                         color: selectedDrive?.id === drive.id ? '#1890ff' : '#52c41a',
                                                         marginBottom: '0.5rem'
-                                                    }} 
+                                                    }}
                                                 />
                                                 <div style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '0.5rem' }}>
                                                     {drive.name}
