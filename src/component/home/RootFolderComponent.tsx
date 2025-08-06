@@ -5,8 +5,9 @@ import { useEffect } from 'react';
 const RootFolderComponent = () => {
     const searchParams = useSearchParams();
     const encodedIframeURL = searchParams.get('iframe');
+    const encodedDriveId = searchParams.get('driveId') || '';
 
-    const iframeURL = encodedIframeURL ? decodeURIComponent(encodedIframeURL) : null;
+    const iframeURL = encodedIframeURL ? decodeURIComponent(encodedIframeURL + `&driveId=${encodedDriveId}`) : null;
     useEffect(() => {
         console.log("check iframeURL: ", iframeURL);
     }, [])
