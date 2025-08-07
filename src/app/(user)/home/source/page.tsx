@@ -508,7 +508,7 @@ const ResponsiveModal = styled(Modal)`
 
 const sourcePlatforms = [
   {
-    name: 'Google Drive',
+    name: 'Google Personal',
     description: 'Connect your Google Drive to import your files.',
     icon:
       <img
@@ -652,7 +652,7 @@ const Source = () => {
 
     console.log("check sourceName: ", sourceName);
 
-    if (sourceName === 'Google Drive')
+    if (sourceName === 'Google Personal')
     {
       router.push(`/home/create/google_drive`);
     } else if (sourceName === 'HubSpot')
