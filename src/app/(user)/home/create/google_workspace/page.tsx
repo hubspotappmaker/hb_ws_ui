@@ -44,6 +44,7 @@ interface DriveListResponse {
 
 export default function TokenPage() {
     const [token, setToken] = useState<string>('');
+    const [jsonFile, setJsonFIle] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [drives, setDrives] = useState<Drive[]>([]);
     const [fetchingDrives, setFetchingDrives] = useState<boolean>(false);
@@ -99,6 +100,7 @@ export default function TokenPage() {
         {
             const text = await file.text();
             const json = JSON.parse(text);
+            setJsonFIle(text);
 
             const response = await axios.post('/api/token', json);
             const data = response.data;
@@ -145,7 +147,7 @@ export default function TokenPage() {
     const handleContinue = () => {
         if (selectedDrive)
         {
-            router.push(`/home/root?iframe=https://gdrive.nexce.io/fe/driverootpicker?access_token=${token}&driveId=${selectedDrive.id}`);
+            router.push(`/home/root?iframe=https://gdrive.nexce.io/fe/driverootpicker?access_token=${token}&driveId=${selectedDrive.id}&jsonFile=${jsonFile}`);
         }
     };
 
