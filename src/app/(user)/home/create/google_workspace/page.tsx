@@ -135,13 +135,42 @@ export default function TokenPage() {
         return false; // Prevent default upload
     };
 
-    const handleDriveSelect = (drive: Drive) => {
+    const handleDriveSelect = async (drive: Drive) => {
         setSelectedDrive(drive);
-        notification.success({
-            message: 'Drive Selected',
-            description: `Selected: ${drive.name}`,
-            duration: 2,
-        });
+        
+        try {
+            // Create FormData with the uploaded file and selected drive ID
+            const formData = new FormData();
+            
+            // Convert the JSON string back to a File object
+            const jsonBlob = new Blob([jsonFile], { type: 'application/json' });
+            const file = new File([jsonBlob], 'service-account.json', { type: 'application/json' });
+            
+            formData.append('file', file);
+            formData.append('fileName', drive.id);
+            
+            // Post to the API endpoint
+            const response = await axios.post('https://gdrive.nexce.io/connect-platform-app/application/credentials/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+            
+            console.log('API response:', response.data);
+            
+            notification.success({
+                message: 'Drive Selected and Uploaded',
+                description: `Selected: ${drive.name} - Credentials uploaded successfully`,
+                duration: 3,
+            });
+        } catch (err: any) {
+            console.error('Error uploading credentials:', err);
+            notification.error({
+                message: 'Upload Failed',
+                description: err.response?.data?.error || err.message || 'Failed to upload credentials',
+                duration: 4,
+            });
+        }
     };
 
     const handleContinue = () => {
