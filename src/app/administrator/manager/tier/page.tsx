@@ -115,6 +115,7 @@ interface CreateTierDto {
     name: string;
     connectLimit: number;
     appLimit: number;
+    sku: string;
 }
 
 type UpdateTierDto = Partial<CreateTierDto>;
@@ -125,6 +126,7 @@ interface Tier {
     isActive: boolean;
     connectLimit: number;
     appLimit: number;
+    sku: string;
     isDeleted: boolean;
     deletedAt: string | null;
     createdAt: string;
@@ -159,6 +161,7 @@ const TierManager = () => {
     const [pageSize, setPageSize] = useState(15);
     const [loading, setLoading] = useState(false);
     const [switchLoading, setSwitchLoading] = useState<{ [key: string]: boolean }>({});
+    const [switchStates, setSwitchStates] = useState<{ [key: string]: boolean }>({});
 
     // Modal states
     const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
@@ -182,6 +185,13 @@ const TierManager = () => {
                 setTiers(tiersData);
                 setTotalRecords(totalRecord);
                 setTotalPages(totalPage);
+                
+                // Initialize switch states
+                const initialSwitchStates: { [key: string]: boolean } = {};
+                tiersData.forEach((tier: Tier) => {
+                    initialSwitchStates[tier._id] = tier.isActive;
+                });
+                setSwitchStates(initialSwitchStates);
             }
         } catch (error)
         {
@@ -199,11 +209,32 @@ const TierManager = () => {
 
     // Handle status change
     const handleStatusChange = async (tierId: string, newStatus: boolean) => {
+        // Optimistically update the switch state
+        setSwitchStates(prev => ({ ...prev, [tierId]: newStatus }));
         setSwitchLoading(prev => ({ ...prev, [tierId]: true }));
 
         try
         {
-            const response = await updateTier(tierId, { isActive: newStatus } as UpdateTierDto);
+            // Find the current tier data
+            const currentTier = tiers.find(tier => tier._id === tierId);
+            if (!currentTier) {
+                message.error('Tier not found');
+                setSwitchStates(prev => ({ ...prev, [tierId]: !newStatus }));
+                return;
+            }
+
+            // Prepare update payload with all required fields
+            const updatePayload = {
+                name: currentTier.name,
+                connectLimit: currentTier.connectLimit,
+                appLimit: currentTier.appLimit,
+                sku: currentTier.sku,
+                isActive: newStatus
+            };
+
+            console.log('Status update payload:', updatePayload);
+
+            const response = await updateTier(tierId, updatePayload);
 
             if (response.status === 200)
             {
@@ -217,20 +248,20 @@ const TierManager = () => {
                 message.success(`Tier status updated to ${newStatus ? 'Active' : 'Inactive'}`);
             } else
             {
-                // message.error('Failed to update tier status');
-                return false;
+                message.error('Failed to update tier status');
+                // Revert the switch state
+                setSwitchStates(prev => ({ ...prev, [tierId]: !newStatus }));
             }
         } catch (error)
         {
             console.error('Error updating tier status:', error);
-            // message.error('Failed to update tier status');
-            return false;
+            message.error('Failed to update tier status');
+            // Revert the switch state
+            setSwitchStates(prev => ({ ...prev, [tierId]: !newStatus }));
         } finally
         {
             setSwitchLoading(prev => ({ ...prev, [tierId]: false }));
         }
-
-        return true;
     };
 
     // Handle edit
@@ -243,15 +274,18 @@ const TierManager = () => {
             {
                 const tierData = response.data;
                 setSelectedTier(tierData);
+                console.log('Setting form values for edit:', {
+                    name: tierData.name,
+                    connectLimit: tierData.connectLimit,
+                    appLimit: tierData.appLimit,
+                    sku: tierData.sku || '',
+                });
+                
                 form.setFieldsValue({
                     name: tierData.name,
                     connectLimit: tierData.connectLimit,
                     appLimit: tierData.appLimit,
-                    orderSyncLimit: tierData.orderSyncLimit,
-                    productSyncLimit: tierData.productSyncLimit,
-                    customerSyncLimit: tierData.customerSyncLimit,
-                    companySyncLimit: tierData.companySyncLimit,
-                    metafieldLimit: tierData.metafieldLimit,
+                    sku: tierData.sku || '',
                 });
                 setIsEditModalVisible(true);
             }
@@ -267,18 +301,50 @@ const TierManager = () => {
 
     // Handle create/update submit
     const handleSubmit = async (values: CreateTierDto) => {
+        console.log('Form values received:', values);
         setModalLoading(true);
         try
         {
+            // Ensure sku is not empty or undefined
+            if (!values.sku || values.sku.trim() === '') {
+                message.error('SKU cannot be empty');
+                setModalLoading(false);
+                return;
+            }
+
+            // Clean the data before sending
+            const cleanValues = {
+                ...values,
+                sku: values.sku.trim()
+            };
+
+            console.log('Submitting values:', cleanValues);
+
             let response;
             if (selectedTier)
             {
-                // Update
-                response = await updateTier(selectedTier._id, values);
+                // Update - ensure all fields are included
+                console.log('Updating tier with ID:', selectedTier._id);
+                console.log('Update payload:', cleanValues);
+                
+                // For update, we need to ensure all required fields are present
+                const updatePayload = {
+                    name: cleanValues.name,
+                    connectLimit: cleanValues.connectLimit,
+                    appLimit: cleanValues.appLimit,
+                    sku: cleanValues.sku
+                };
+                
+                console.log('Final update payload:', updatePayload);
+                console.log('SKU value in payload:', updatePayload.sku);
+                console.log('SKU type:', typeof updatePayload.sku);
+                
+                response = await updateTier(selectedTier._id, updatePayload);
             } else
             {
                 // Create
-                response = await createTier(values);
+                console.log('Creating new tier with payload:', cleanValues);
+                response = await createTier(cleanValues);
             }
 
             if (response.status === 200 || response.status === 201)
@@ -333,6 +399,17 @@ const TierManager = () => {
             width: 150,
         },
         {
+            title: 'SKU',
+            dataIndex: 'sku',
+            key: 'sku',
+            render: (sku: string) => (
+                <Tag color="blue" icon={<TagOutlined />}>
+                    {sku || 'N/A'}
+                </Tag>
+            ),
+            width: 120,
+        },
+        {
             title: 'Limits',
             key: 'limits',
             render: (record: Tier) => (
@@ -365,7 +442,7 @@ const TierManager = () => {
 
                 return (
                     <Switch
-                        checked={isActive}
+                        checked={switchStates[record._id] !== undefined ? switchStates[record._id] : isActive}
                         loading={switchLoading[record._id]}
                         onChange={async (checked) => {
                             await handleStatusChange(record._id, checked);
@@ -462,6 +539,10 @@ const TierManager = () => {
                     form={form}
                     layout="vertical"
                     onFinish={handleSubmit}
+                    onValuesChange={(changedValues, allValues) => {
+                        console.log('Form values changed:', changedValues);
+                        console.log('All form values:', allValues);
+                    }}
                 >
                     <Form.Item
                         name="name"
@@ -485,6 +566,24 @@ const TierManager = () => {
                         rules={[{ required: true, message: 'Please enter app limit' }]}
                     >
                         <InputNumber min={1} placeholder="Enter app limit" style={{ width: '100%' }} />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="sku"
+                        label="SKU"
+                        rules={[
+                            { required: true, message: 'Please enter SKU' },
+                            { 
+                                validator: (_, value) => {
+                                    if (value && value.trim() === '') {
+                                        return Promise.reject(new Error('SKU cannot be empty'));
+                                    }
+                                    return Promise.resolve();
+                                }
+                            }
+                        ]}
+                    >
+                        <Input placeholder="Enter SKU" />
                     </Form.Item>
 
                     <Form.Item>
