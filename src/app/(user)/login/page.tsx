@@ -5,6 +5,7 @@ import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { loginApi, pingMe, registerApi } from '@/service/user/auth';
 import Link from 'next/link';
+import axios from 'axios';
 
 const { Title } = Typography;
 
@@ -73,6 +74,30 @@ const SignIn = () => {
                 localStorage.setItem('role', role);
                 localStorage.setItem('email', email);
                 localStorage.setItem('name', name);
+                
+                // Check for queue_hubspot in localStorage
+                const queueHubspot = localStorage.getItem('queue_hubspot');
+                if (queueHubspot) {
+                    try {
+                        const submitBody = JSON.parse(queueHubspot);
+                        const resQueue = await axios.post('https://gdrive.nexce.io/connect-platform-app/application/connect-gg-driver',
+                            submitBody,
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': '*/*',
+                                    'Authorization': `Bearer ${access_token}`,
+                                }
+                            }
+                        );
+
+                        console.log("check resQueue: ", resQueue);
+                        localStorage.removeItem("queue_hubspot");
+                    } catch (queueError) {
+                        console.error("Error processing queue_hubspot:", queueError);
+                    }
+                }
+                
                 await pointToWp(values.email, values.password);
                 if (role === 'admin') {
                     router.push('/administrator/manager/user');
